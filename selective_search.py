@@ -1,26 +1,43 @@
 import random
 import cv2
 
-image = cv2.imread("images/bottle.jpeg")
+image = cv2.imread("images/szampony.jpg")
+
+# image = image.copy()
+# image = cv2.resize(image, (800, 1200), interpolation=cv2.INTER_AREA)
+# cv2.imwrite("output/" + "resized_image.jpg", image)
 
 ss = cv2.ximgproc.segmentation.createSelectiveSearchSegmentation()
 ss.setBaseImage(image)
-ss.switchToSelectiveSearchQuality()
+# ss.switchToSelectiveSearchQuality()
+ss.switchToSelectiveSearchFast()
 rects = ss.process()
 
-for i in range(0, len(rects), 100):
-    # clone the original image so we can draw on it
-    output = image.copy()
-    # loop over the current subset of region proposals
-    for (x, y, w, h) in rects[i:i + 100]:
-        if (w > 20 and w < 30):
-            continue
-        # draw the region proposal bounding box on the image
-        color = [random.randint(0, 255) for j in range(0, 3)]
-        cv2.rectangle(output, (x, y), (x + w, y + h), color, 2)
-    # show the output image
-        cv2.imshow("Output", output)
-        key = cv2.waitKey(0) & 0xFF
-        # if the `q` key was pressed, break from the loop
-        if key == ord("q"):
-            break
+(H, W) = image.shape[:2]
+len_rects = len(rects)
+
+output = image.copy()
+
+inc = 0
+for (x, y, w, h) in rects:
+
+    if not (w / float(W) >= 0.06 and w / float(W) <= 0.08 and h / float(H) >= 0.8 and h / float(H) <= 1):
+        continue
+
+    # if not (w / float(W) > 0.02 and w / float(W) < 0.07 and h / float(H) > 0.06 and h / float(H) < 0.15):
+    #     continue
+
+    # if not (w / float(W) < 0.1 and h / float(H) > 0.8):
+    #     continue
+
+    inc = inc + 1
+    # draw the region proposal bounding box on the image
+    color = [random.randint(0, 255) for j in range(0, 3)]
+    cv2.rectangle(output, (x, y), (x + w, y + h), color, 2)
+
+    roi = image[y:y + h, x:x + w]
+    cv2.imwrite("output/" + str(inc) + "_image.jpg", roi)
+
+print(inc)
+cv2.imshow("Output", output)
+key = cv2.waitKey(0) & 0xFF
