@@ -35,13 +35,13 @@ train_generator = train_datagen.flow_from_directory(
     'dataset/train',
     target_size=(224, 224),
     batch_size=batch_size,
-    class_mode='binary')
+    class_mode='categorical')
 
 validation_generator = test_datagen.flow_from_directory(
     'dataset/validation',
     target_size=(224, 224),
     batch_size=batch_size,
-    class_mode='binary')
+    class_mode='categorical')
 
 # =========================================================
 
@@ -61,7 +61,7 @@ pool2 = MaxPooling2D(pool_size=(2, 2))(conv2)
 
 flat = Flatten()(pool2)
 hidden1 = Dense(10, activation='relu')(flat)
-output = Dense(3, "softmax", name="predictions")(hidden1)
+output = Dense(5, "softmax", name="predictions")(hidden1)
 
 model = Model(inputs=input, outputs=output, name='Custom_model')
 
