@@ -20,7 +20,7 @@ data_dir = "dataset"
 
 batch_size = 1
 num_classes = 4
-epochs = 90
+epochs = 15
 
 img_height = 224
 img_width = 224
@@ -33,6 +33,7 @@ train_ds = tf.keras.utils.image_dataset_from_directory(
     data_dir,
     validation_split=0.2,
     subset="training",
+    shuffle=True,
     seed=123,
     image_size=(img_height, img_width),
     batch_size=batch_size)
@@ -41,6 +42,7 @@ validation_ds = tf.keras.utils.image_dataset_from_directory(
     data_dir,
     validation_split=0.2,
     subset="validation",
+    shuffle=True,
     seed=123,
     image_size=(img_height, img_width),
     batch_size=batch_size)
@@ -121,7 +123,7 @@ plt.title('Training and Validation Loss')
 plt.show()
 # =========================================================
 
-img_path = "dataset/002/10_image.jpg"
+img_path = "dataset/003/24_imagea.jpg"
 # img_path = "dataset/train/005/55_image.jpg"
 
 img = tf.keras.utils.load_img(

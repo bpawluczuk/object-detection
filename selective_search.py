@@ -1,7 +1,7 @@
 import random
 import cv2
 
-image = cv2.imread("images/004a.jpg")
+image = cv2.imread("images/004.jpg")
 
 # image = image.copy()
 # image = cv2.resize(image, (800, 1200), interpolation=cv2.INTER_AREA)
@@ -21,7 +21,7 @@ output = image.copy()
 inc = 0
 for (x, y, w, h) in rects:
 
-    if not (w / float(W) >= 0.25 and w / float(W) <= 0.4 and h / float(H) >= 0.7 and h / float(H) <= 1):
+    if not (w / float(W) >= 0.2 and w / float(W) <= 0.6 and h / float(H) >= 0.2 and h / float(H) <= 1):
         continue
 
     # if not (w / float(W) >= 0.06 and w / float(W) <= 0.08 and h / float(H) >= 0.8 and h / float(H) <= 1):
