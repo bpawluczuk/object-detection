@@ -1,7 +1,7 @@
 import tensorflow as tf
 import datetime
 import cv2
-import numpy
+import numpy as np
 import seaborn as sns
 
 from tensorflow import keras
@@ -10,6 +10,7 @@ from keras.optimizers import Adam
 from keras.models import Model
 from keras.utils import plot_model
 from keras.preprocessing.image import ImageDataGenerator
+from keras.preprocessing import image
 
 sns.set()
 
@@ -53,15 +54,18 @@ gamma_init = keras.initializers.RandomNormal(mean=0.0, stddev=0.02)
 
 input = Input(shape=IMAGE_SHAPE)
 
-conv1 = Conv2D(32, kernel_size=4, activation='relu')(input)
-pool1 = MaxPooling2D(pool_size=(2, 2))(conv1)
+x = Conv2D(32, kernel_size=4, activation='relu')(input)
+x = MaxPooling2D(pool_size=(2, 2))(x)
 
-conv2 = Conv2D(16, kernel_size=4, activation='relu')(pool1)
-pool2 = MaxPooling2D(pool_size=(2, 2))(conv2)
+x = Conv2D(32, kernel_size=4, activation='relu')(x)
+x = MaxPooling2D(pool_size=(2, 2))(x)
 
-flat = Flatten()(pool2)
-hidden1 = Dense(10, activation='relu')(flat)
-output = Dense(5, "softmax", name="predictions")(hidden1)
+x = Conv2D(16, kernel_size=4, activation='relu')(x)
+x = MaxPooling2D(pool_size=(2, 2))(x)
+
+x = Flatten()(x)
+x = Dense(100, activation='relu')(x)
+output = Dense(5, "softmax", name="predictions")(x)
 
 model = Model(inputs=input, outputs=output, name='Custom_model')
 
@@ -72,5 +76,19 @@ model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=["ac
 
 # Train the Model
 history = model.fit(train_generator,
-                    epochs=30,
+                    epochs=50,
                     validation_data=validation_generator)
+
+# =========================================================
+
+# image = cv2.imread("dataset/train/002.shauma/30_image.jpg")
+image = cv2.imread("dataset/train/005.shauma/55_image.jpg")
+
+test_input = cv2.resize(image, (224, 224))
+
+img_array = np.asarray(test_input)
+img_batch = np.expand_dims(img_array / 255, axis=0)
+print(img_batch.shape)
+
+predict = model.predict(img_batch)
+print(predict)
