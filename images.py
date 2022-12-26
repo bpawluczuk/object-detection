@@ -1,7 +1,7 @@
 import random
 import cv2
 
-image = cv2.imread("dataset/001.shauma/20_image.jpg")
+image = cv2.imread("dataset/001/20_image.jpg")
 
 output = cv2.resize(image, (224, 224))
 

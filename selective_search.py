@@ -1,7 +1,7 @@
 import random
 import cv2
 
-image = cv2.imread("images/szampony.jpg")
+image = cv2.imread("images/006.jpg")
 
 # image = image.copy()
 # image = cv2.resize(image, (800, 1200), interpolation=cv2.INTER_AREA)
@@ -9,8 +9,8 @@ image = cv2.imread("images/szampony.jpg")
 
 ss = cv2.ximgproc.segmentation.createSelectiveSearchSegmentation()
 ss.setBaseImage(image)
-# ss.switchToSelectiveSearchQuality()
-ss.switchToSelectiveSearchFast()
+ss.switchToSelectiveSearchQuality()
+# ss.switchToSelectiveSearchFast()
 rects = ss.process()
 
 (H, W) = image.shape[:2]
@@ -21,8 +21,11 @@ output = image.copy()
 inc = 0
 for (x, y, w, h) in rects:
 
-    if not (w / float(W) >= 0.06 and w / float(W) <= 0.08 and h / float(H) >= 0.8 and h / float(H) <= 1):
+    if not (w / float(W) >= 0.25 and w / float(W) <= 0.5 and h / float(H) >= 0.9 and h / float(H) <= 1):
         continue
+
+    # if not (w / float(W) >= 0.06 and w / float(W) <= 0.08 and h / float(H) >= 0.8 and h / float(H) <= 1):
+    #     continue
 
     # if not (w / float(W) > 0.02 and w / float(W) < 0.07 and h / float(H) > 0.06 and h / float(H) < 0.15):
     #     continue
