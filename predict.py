@@ -56,8 +56,8 @@ print(model.summary())
 
 model.compile(optimizer=optimizer, loss=tf.losses.SparseCategoricalCrossentropy(from_logits=True), metrics=["accuracy"])
 
-model.load_weights("model/flowers.h5")
-print("load model weights")
+model = keras.models.load_model('model')
+print("load model")
 
 # ===============================================================================================
 
@@ -89,7 +89,7 @@ for (x, y, w, h) in rects:
     predictions = model.predict(img_array)
     score = tf.nn.softmax(predictions[0])
 
-    if class_names[np.argmax(score)] == "003" and (100 * np.max(score)) > 47.4:
+    if class_names[np.argmax(score)] == "003" and (100 * np.max(score)) >= 47.53:
         print(
             "This image most likely belongs to {} with a {:.2f} percent confidence."
             .format(class_names[np.argmax(score)], 100 * np.max(score))

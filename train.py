@@ -20,7 +20,7 @@ data_dir = "dataset"
 
 batch_size = 1
 num_classes = 4
-epochs = 60
+epochs = 90
 
 img_height = 224
 img_width = 224
@@ -94,8 +94,8 @@ history = model.fit(train_ds,
                     epochs=epochs,
                     validation_data=validation_ds)
 
-model.save_weights("model/flowers.h5")
-print("save model weights")
+model.save("model")
+print("save model")
 
 # =========================================================
 acc = history.history['accuracy']
