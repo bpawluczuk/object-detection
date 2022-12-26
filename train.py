@@ -6,7 +6,7 @@ import seaborn as sns
 
 from tensorflow import keras
 from keras.layers import *
-from keras.optimizers import Adam
+from keras.optimizers import Adam, SGD
 from keras.models import Model
 import matplotlib.pyplot as plt
 
@@ -54,7 +54,9 @@ for image_batch, labels_batch in train_ds:
 
 # =========================================================
 
-optimizer = Adam(learning_rate=2e-5, beta_1=0.5)
+# optimizer = Adam(learning_rate=2e-5, beta_1=0.5)
+optimizer = SGD(learning_rate=1e-6, momentum=0.9)
+
 kernel_init = keras.initializers.RandomNormal(mean=0.0, stddev=0.02)
 gamma_init = keras.initializers.RandomNormal(mean=0.0, stddev=0.02)
 
