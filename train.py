@@ -8,9 +8,6 @@ from tensorflow import keras
 from keras.layers import *
 from keras.optimizers import Adam
 from keras.models import Model
-from keras.utils import plot_model
-from keras.preprocessing.image import ImageDataGenerator
-from keras.preprocessing import image
 import matplotlib.pyplot as plt
 
 sns.set()
@@ -19,7 +16,7 @@ sns.set()
 data_dir = "dataset"
 
 batch_size = 1
-num_classes = 4
+num_classes = 6
 epochs = 15
 
 img_height = 224
@@ -70,18 +67,34 @@ x = RandomRotation(0.1)(x)
 x = RandomZoom(0.1)(x)
 
 x = Rescaling(1. / 255)(x)
-x = Conv2D(16, kernel_size=3, padding='same', activation='relu')(x)
-x = MaxPooling2D()(x)
-
-x = Conv2D(32, kernel_size=3, padding='same', activation='relu')(x)
-x = MaxPooling2D()(x)
 
 x = Conv2D(64, kernel_size=3, padding='same', activation='relu')(x)
-x = MaxPooling2D()(x)
+x = Conv2D(64, kernel_size=3, padding='same', activation='relu')(x)
+x = MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(x)
 
-x = Dropout(0.2)(x)
+x = Conv2D(128, kernel_size=3, padding='same', activation='relu')(x)
+x = Conv2D(128, kernel_size=3, padding='same', activation='relu')(x)
+x = MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(x)
+
+x = Conv2D(256, kernel_size=3, padding='same', activation='relu')(x)
+x = Conv2D(256, kernel_size=3, padding='same', activation='relu')(x)
+x = Conv2D(256, kernel_size=3, padding='same', activation='relu')(x)
+x = MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(x)
+
+x = Conv2D(512, kernel_size=3, padding='same', activation='relu')(x)
+x = Conv2D(512, kernel_size=3, padding='same', activation='relu')(x)
+x = Conv2D(512, kernel_size=3, padding='same', activation='relu')(x)
+x = MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(x)
+
+x = Conv2D(512, kernel_size=3, padding='same', activation='relu')(x)
+x = Conv2D(512, kernel_size=3, padding='same', activation='relu')(x)
+x = Conv2D(512, kernel_size=3, padding='same', activation='relu')(x)
+x = MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(x)
+
+# x = Dropout(0.2)(x)
 x = Flatten()(x)
-x = Dense(122, activation='relu')(x)
+x = Dense(256, activation='relu')(x)
+x = Dense(128, activation='relu')(x)
 output = Dense(num_classes, "softmax", name="predictions")(x)
 
 model = Model(inputs=input, outputs=output, name='Custom_model')
@@ -123,7 +136,7 @@ plt.title('Training and Validation Loss')
 plt.show()
 # =========================================================
 
-img_path = "dataset/003/24_imagea.jpg"
+img_path = "dataset/004/16_imagea.jpg"
 # img_path = "dataset/train/005/55_image.jpg"
 
 img = tf.keras.utils.load_img(
