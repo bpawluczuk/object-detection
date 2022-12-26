@@ -30,7 +30,7 @@ except:
 
 data_dir = "dataset"
 
-batch_size = 1
+batch_size = 4
 num_classes = 6
 epochs = 15
 
@@ -70,8 +70,8 @@ for image_batch, labels_batch in train_ds:
 # =========================================================
 
 # optimizer = Adam(learning_rate=2e-5, beta_1=0.5)
-# optimizer = SGD(learning_rate=1e-6, momentum=0.9)
-optimizer = SGD(learning_rate=2e-5, momentum=0.9)
+optimizer = SGD(learning_rate=1e-6, momentum=0.9)
+# optimizer = SGD(learning_rate=2e-5, momentum=0.9)
 
 kernel_init = keras.initializers.RandomNormal(mean=0.0, stddev=0.02)
 gamma_init = keras.initializers.RandomNormal(mean=0.0, stddev=0.02)
