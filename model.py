@@ -16,13 +16,11 @@ import matplotlib.pyplot as plt
 sns.set()
 
 # =========================================================
-data_dir = "flowers"
-train_data_dir = "dataset/train"
-validation_data_dir = "dataset/validation"
+data_dir = "dataset"
 
 batch_size = 1
 num_classes = 5
-epochs = 10
+epochs = 30
 
 img_height = 224
 img_width = 224
@@ -70,18 +68,18 @@ x = RandomRotation(0.1)(x)
 x = RandomZoom(0.1)(x)
 
 x = Rescaling(1. / 255)(x)
-x = Conv2D(16, kernel_size=4, padding='same', activation='relu')(x)
-x = MaxPooling2D(pool_size=(2, 2))(x)
+x = Conv2D(16, kernel_size=3, padding='same', activation='relu')(x)
+x = MaxPooling2D()(x)
 
-x = Conv2D(32, kernel_size=4, padding='same', activation='relu')(x)
-x = MaxPooling2D(pool_size=(2, 2))(x)
+x = Conv2D(32, kernel_size=3, padding='same', activation='relu')(x)
+x = MaxPooling2D()(x)
 
-x = Conv2D(64, kernel_size=4, padding='same', activation='relu')(x)
-x = MaxPooling2D(pool_size=(2, 2))(x)
+x = Conv2D(64, kernel_size=3, padding='same', activation='relu')(x)
+x = MaxPooling2D()(x)
 
 x = Dropout(0.2)(x)
 x = Flatten()(x)
-x = Dense(244, activation='relu')(x)
+x = Dense(122, activation='relu')(x)
 output = Dense(num_classes, "softmax", name="predictions")(x)
 
 model = Model(inputs=input, outputs=output, name='Custom_model')
@@ -123,7 +121,7 @@ plt.title('Training and Validation Loss')
 plt.show()
 # =========================================================
 
-img_path = "flowers/dandelion/15987457_49dc11bf4b.jpg"
+img_path = "dataset/002/10_image.jpg"
 # img_path = "dataset/train/005/55_image.jpg"
 
 img = tf.keras.utils.load_img(
