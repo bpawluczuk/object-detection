@@ -13,6 +13,21 @@ import matplotlib.pyplot as plt
 sns.set()
 
 # =========================================================
+config = tf.compat.v1.ConfigProto()
+config.gpu_options.allow_growth = True
+session = tf.compat.v1.Session(config=config)
+
+devices = session.list_devices()
+for d in devices:
+    print(d.name)
+
+physical_devices = tf.config.list_physical_devices('GPU')
+try:
+    tf.config.experimental.set_memory_growth(physical_devices[0], True)
+except:
+    pass
+# =========================================================
+
 data_dir = "dataset"
 
 batch_size = 1
@@ -55,7 +70,8 @@ for image_batch, labels_batch in train_ds:
 # =========================================================
 
 # optimizer = Adam(learning_rate=2e-5, beta_1=0.5)
-optimizer = SGD(learning_rate=1e-6, momentum=0.9)
+# optimizer = SGD(learning_rate=1e-6, momentum=0.9)
+optimizer = SGD(learning_rate=2e-5, momentum=0.9)
 
 kernel_init = keras.initializers.RandomNormal(mean=0.0, stddev=0.02)
 gamma_init = keras.initializers.RandomNormal(mean=0.0, stddev=0.02)
