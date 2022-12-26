@@ -19,8 +19,8 @@ sns.set()
 data_dir = "dataset"
 
 batch_size = 1
-num_classes = 5
-epochs = 30
+num_classes = 4
+epochs = 60
 
 img_height = 224
 img_width = 224
