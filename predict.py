@@ -8,16 +8,17 @@ from tensorflow import keras
 sns.set()
 
 # ===============================================================================================
-img_height = 224
-img_width = 224
+img_height = 124
+img_width = 124
 
 model = keras.models.load_model('model')
 print("load model")
 # ===============================================================================================
 
-class_names = ["001", "002", "003", "004", "005", "006"]
+# class_names = ["001", "006", "003", "004", "005", "006"]
+class_names = ["000", "001", "006"]
 
-image = cv2.imread("images/test_półka.jpg")
+image = cv2.imread("images/test.jpg")
 ss = cv2.ximgproc.segmentation.createSelectiveSearchSegmentation()
 ss.setBaseImage(image)
 ss.switchToSelectiveSearchFast()
@@ -30,7 +31,7 @@ output = image.copy()
 
 for (x, y, w, h) in rects:
 
-    if w / float(W) < 0.1 or h / float(H) < 0.1:
+    if (w / float(W) < 0.05 or w / float(W) > 0.09) or (h / float(H) < 0.1 or h / float(H) > 0.2):
         continue
 
     roi = image[y:y + h, x:x + w]
@@ -43,7 +44,8 @@ for (x, y, w, h) in rects:
     predictions = model.predict(img_array)
     score = tf.nn.softmax(predictions[0])
 
-    if class_names[np.argmax(score)] == "002" and (100 * np.max(score)) >= 35:
+    print(score)
+    if class_names[np.argmax(score)] == "006" and (100 * np.max(score)) >= 40:
         print(
             "This image most likely belongs to {} with a {:.2f} percent confidence."
             .format(class_names[np.argmax(score)], 100 * np.max(score))

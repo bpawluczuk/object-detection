@@ -1,7 +1,7 @@
 import random
 import cv2
 
-image = cv2.imread("images/006.jpg")
+image = cv2.imread("images/test.jpg")
 
 # image = image.copy()
 # image = cv2.resize(image, (800, 1200), interpolation=cv2.INTER_AREA)
@@ -21,8 +21,11 @@ output = image.copy()
 inc = 0
 for (x, y, w, h) in rects:
 
-    if not (w / float(W) >= 0.2 and w / float(W) <= 0.6 and h / float(H) >= 0.2 and h / float(H) <= 1):
+    if (w / float(W) < 0.06 or w / float(W) > 0.08) or (h / float(H) < 0.1 or h / float(H) > 0.2):
         continue
+
+    # if not (w / float(W) >= 0.2 and w / float(W) <= 0.6 and h / float(H) >= 0.2 and h / float(H) <= 1):
+    #     continue
 
     # if not (w / float(W) >= 0.06 and w / float(W) <= 0.08 and h / float(H) >= 0.8 and h / float(H) <= 1):
     #     continue
@@ -39,7 +42,7 @@ for (x, y, w, h) in rects:
     cv2.rectangle(output, (x, y), (x + w, y + h), color, 2)
 
     roi = image[y:y + h, x:x + w]
-    cv2.imwrite("output/" + str(inc) + "_imagea.jpg", roi)
+    cv2.imwrite("output/" + str(inc) + "_000.jpg", roi)
 
 print(inc)
 cv2.imshow("Output", output)
