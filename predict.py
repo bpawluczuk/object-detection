@@ -5,6 +5,7 @@ import numpy as np
 import seaborn as sns
 
 from tensorflow import keras
+
 sns.set()
 
 # ===============================================================================================
@@ -20,6 +21,10 @@ class_names = ["000", "001", "006"]
 
 image = cv2.imread("images/shower_all.jpg")
 image = cv2.resize(image, (600, 800), interpolation=cv2.INTER_AREA)
+
+# cv2.imshow("Output", image)
+# key = cv2.waitKey(0) & 0xFF
+
 ss = cv2.ximgproc.segmentation.createSelectiveSearchSegmentation()
 ss.setBaseImage(image)
 ss.switchToSelectiveSearchFast()
@@ -31,10 +36,17 @@ len_rects = len(rects)
 output = image.copy()
 print("Predict...")
 
+inc_total = 0
+inc_pred = 0
+
 for (x, y, w, h) in rects:
 
-    if w / float(W) < 0.05 or w / float(W) > 0.1 or h / float(H) < 0.1 or h / float(H) > 0.2:
+    inc_total = inc_total + 1
+
+    if w / float(W) < 0.05 or w / float(W) > 0.1 or h / float(H) < 0.08:
         continue
+
+    inc_pred = inc_pred + 1
 
     roi = image[y:y + h, x:x + w]
     roi = cv2.cvtColor(roi, cv2.COLOR_BGR2RGB)
@@ -55,6 +67,9 @@ for (x, y, w, h) in rects:
 
         color = [random.randint(0, 255) for j in range(0, 3)]
         cv2.rectangle(output, (x, y), (x + w, y + h), color, 2)
+
+print("Total: ", inc_total)
+print("Predict: ", inc_pred)
 
 cv2.imshow("Output", output)
 key = cv2.waitKey(0) & 0xFF
