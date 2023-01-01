@@ -18,7 +18,8 @@ print("load model")
 # class_names = ["001", "006", "003", "004", "005", "006"]
 class_names = ["000", "001", "006"]
 
-image = cv2.imread("images/test.jpg")
+image = cv2.imread("images/shower_all.jpg")
+image = cv2.resize(image, (600, 800), interpolation=cv2.INTER_AREA)
 ss = cv2.ximgproc.segmentation.createSelectiveSearchSegmentation()
 ss.setBaseImage(image)
 ss.switchToSelectiveSearchFast()
@@ -28,10 +29,11 @@ rects = ss.process()
 len_rects = len(rects)
 
 output = image.copy()
+print("Predict...")
 
 for (x, y, w, h) in rects:
 
-    if (w / float(W) < 0.05 or w / float(W) > 0.09) or (h / float(H) < 0.1 or h / float(H) > 0.2):
+    if w / float(W) < 0.05 or w / float(W) > 0.1 or h / float(H) < 0.1 or h / float(H) > 0.2:
         continue
 
     roi = image[y:y + h, x:x + w]
