@@ -11,7 +11,7 @@ from skimage import feature
 from skimage import exposure
 
 from sklearn import svm
-from sklearn.metrics import classification_report, accuracy_score
+from sklearn.metrics import classification_report, accuracy_score, confusion_matrix
 
 image = cv2.imread('images/hog.jpg')
 image = cv2.resize(image, (200, 200))
@@ -74,10 +74,11 @@ for filename in os.listdir("dataset_hog_test"):
                                  block_norm='L1', visualize=True, transform_sqrt=True)
 
     result = model.predict([H])[0]
-    # pred = model.predict([H])
-    # print(pred[0].shape)
-    # print('Accuracy: {:.2f}'.format(accuracy_score(image, y_pred)))
 
-    # cv2.putText(image, mapping[result], (10, 35), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 0), 2)
-    # plt.imshow(image)
-    # plt.show()
+    fd = H.reshape(1, -1)
+    score = model.decision_function([H])
+    print(score)
+
+    cv2.putText(image, mapping[result], (10, 35), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 0), 2)
+    plt.imshow(image)
+    plt.show()
