@@ -15,12 +15,19 @@ img_width = 124
 model = keras.models.load_model('model')
 print("load model")
 # ===============================================================================================
+images_predicted = []
 
 # class_names = ["001", "006", "003", "004", "005", "006"]
 class_names = ["000", "001", "006"]
 
+# image = cv2.imread("images/test.jpg")
 image = cv2.imread("images/shower_all.jpg")
-image = cv2.resize(image, (600, 800), interpolation=cv2.INTER_AREA)
+
+# Scale down to 25%
+p = 0.35
+w = int(image.shape[1] * p)
+h = int(image.shape[0] * p)
+image = cv2.resize(image, (w, h))
 
 # cv2.imshow("Output", image)
 # key = cv2.waitKey(0) & 0xFF
@@ -43,8 +50,11 @@ for (x, y, w, h) in rects:
 
     inc_total = inc_total + 1
 
-    if w / float(W) < 0.05 or w / float(W) > 0.1 or h / float(H) < 0.08:
-        continue
+    # if w / float(W) < 0.04 or w / float(W) > 0.06 or h / float(H) < 0.05:
+    #     continue
+
+    # if h / float(H) < 0.05:
+    #     continue
 
     inc_pred = inc_pred + 1
 
@@ -58,18 +68,27 @@ for (x, y, w, h) in rects:
     predictions = model.predict(img_array)
     score = tf.nn.softmax(predictions[0])
 
+    # cv2.imshow("Output", roi)
+    # key = cv2.waitKey(0) & 0xFF
+
     print(score)
-    if class_names[np.argmax(score)] == "006" and (100 * np.max(score)) >= 40:
+    if class_names[np.argmax(score)] == "001" and (100 * np.max(score)) >= 55:
         print(
             "This image most likely belongs to {} with a {:.2f} percent confidence."
             .format(class_names[np.argmax(score)], 100 * np.max(score))
         )
 
         color = [random.randint(0, 255) for j in range(0, 3)]
-        cv2.rectangle(output, (x, y), (x + w, y + h), color, 2)
+        cv2.rectangle(output, (x, y), (x + w, y + h), color, 1)
+
+        images_predicted.append(roi)
 
 print("Total: ", inc_total)
 print("Predict: ", inc_pred)
 
 cv2.imshow("Output", output)
 key = cv2.waitKey(0) & 0xFF
+
+# for image in images_predicted:
+#     cv2.imshow("Output", image)
+#     key = cv2.waitKey(0) & 0xFF
