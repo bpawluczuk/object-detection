@@ -9,8 +9,7 @@ from skimage import feature
 from sklearn import svm
 
 svm = joblib.load('model/svm/svm.sav')
-
-mapping = ["000", "001", "002", "003", "004", "005"]
+classes = ["000", "001", "002", "003", "004", "005"]
 
 # image = image_test = cv2.imread("dataset_hog_test/yellow.jpg")
 image = image_test = cv2.imread("dataset_hog_test/bordo.jpg")
@@ -27,6 +26,6 @@ result = svm.predict([H])[0]
 score = svm.predict_proba([H])
 print(score)
 
-cv2.putText(image_test, mapping[result], (10, 35), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 0), 2)
+cv2.putText(image_test, classes[result], (10, 35), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 0), 2)
 plt.imshow(cv2.cvtColor(image_test, cv2.COLOR_BGR2RGB))
 plt.show()

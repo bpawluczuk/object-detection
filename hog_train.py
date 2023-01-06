@@ -12,14 +12,14 @@ from skimage import exposure
 
 from sklearn import svm
 
-mapping = {}
+classes = {}
 images = []
 labels = []
 
 for i, brand in enumerate(os.listdir("dataset_hog")):
     if brand.startswith('.'):
         continue
-    mapping[i] = brand
+    classes[i] = brand
     brand_directory = os.path.join("dataset_hog", brand)
     for filename in os.listdir(brand_directory):
         if filename.startswith('.'):
@@ -68,10 +68,10 @@ print(score)
 score = svm.predict_proba([H])
 print(score)
 
-cv2.putText(image, mapping[result], (10, 35), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 0), 2)
+cv2.putText(image, classes[result], (10, 35), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 0), 2)
 plt.imshow(image)
 plt.show()
 
-cv2.putText(image_test, mapping[result], (10, 35), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 0), 2)
+cv2.putText(image_test, classes[result], (10, 35), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 0), 2)
 plt.imshow(cv2.cvtColor(image_test, cv2.COLOR_BGR2RGB))
 plt.show()
