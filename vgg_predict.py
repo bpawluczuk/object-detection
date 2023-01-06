@@ -29,9 +29,6 @@ w = int(image.shape[1] * p)
 h = int(image.shape[0] * p)
 image = cv2.resize(image, (w, h))
 
-# cv2.imshow("Output", image)
-# key = cv2.waitKey(0) & 0xFF
-
 ss = cv2.ximgproc.segmentation.createSelectiveSearchSegmentation()
 ss.setBaseImage(image)
 ss.switchToSelectiveSearchFast()
@@ -53,9 +50,6 @@ for (x, y, w, h) in rects:
     inc_total = inc_total + 1
 
     # if w / float(W) < 0.04 or w / float(W) > 0.06 or h / float(H) < 0.05:
-    #     continue
-
-    # if h / float(H) < 0.05:
     #     continue
 
     inc_pred = inc_pred + 1
