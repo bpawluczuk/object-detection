@@ -12,7 +12,7 @@ sns.set()
 img_height = 124
 img_width = 124
 
-model = keras.models.load_model('model')
+model = keras.models.load_model('model/vgg')
 print("load model")
 # ===============================================================================================
 images_predicted = []
