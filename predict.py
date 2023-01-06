@@ -17,8 +17,8 @@ print("load model")
 # ===============================================================================================
 images_predicted = []
 
-# class_names = ["001", "006", "003", "004", "005", "006"]
-class_names = ["000", "001", "006"]
+class_names = ["000", "001", "002", "003", "004", "005"]
+# class_names = ["000", "001", "006"]
 
 # image = cv2.imread("images/test.jpg")
 image = cv2.imread("images/shower_all.jpg")
@@ -46,6 +46,8 @@ print("Predict...")
 inc_total = 0
 inc_pred = 0
 
+inc = 0
+
 for (x, y, w, h) in rects:
 
     inc_total = inc_total + 1
@@ -59,6 +61,7 @@ for (x, y, w, h) in rects:
     inc_pred = inc_pred + 1
 
     roi = image[y:y + h, x:x + w]
+    image_out = roi.copy()
     roi = cv2.cvtColor(roi, cv2.COLOR_BGR2RGB)
     roi = cv2.resize(roi, (img_height, img_width))
 
@@ -72,7 +75,8 @@ for (x, y, w, h) in rects:
     # key = cv2.waitKey(0) & 0xFF
 
     print(score)
-    if class_names[np.argmax(score)] == "001" and (100 * np.max(score)) >= 55:
+
+    if class_names[np.argmax(score)] == "002" and (100 * np.max(score)) >= 34:
         print(
             "This image most likely belongs to {} with a {:.2f} percent confidence."
             .format(class_names[np.argmax(score)], 100 * np.max(score))
@@ -82,6 +86,9 @@ for (x, y, w, h) in rects:
         cv2.rectangle(output, (x, y), (x + w, y + h), color, 1)
 
         images_predicted.append(roi)
+
+        inc = inc + 1;
+        cv2.imwrite("garbage/" + str(inc) + "_g.jpg", image_out)
 
 print("Total: ", inc_total)
 print("Predict: ", inc_pred)
