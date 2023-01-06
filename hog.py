@@ -50,14 +50,16 @@ features = [feature.hog(image, orientations=9,
 sgd = SGDClassifier()
 sgd.fit(features, labels)
 
-svm = svm.SVC(decision_function_shape='ovr')
+svm = svm.SVC(decision_function_shape='ovr', probability=True)
 svm.fit(features, labels)
 
 # for filename in os.listdir("dataset_hog_test"):
 # image = cv2.imread(os.path.join("images/yellow.jpg", filename))
-# image = cv2.imread("images/yellow.jpg")
-# image = cv2.imread("images/bordo.jpg")
-image = cv2.imread("images/006.jpg")
+
+# image = image_test = cv2.imread("dataset_hog_test/yellow.jpg")
+image = image_test = cv2.imread("dataset_hog_test/bordo.jpg")
+# image = image_test = cv2.imread("dataset_hog_test/fake_3.jpg")
+
 image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 image = cv2.resize(image, (200, 200))
 
@@ -72,6 +74,13 @@ fd = H.reshape(1, -1)
 score = svm.decision_function([H])
 print(score)
 
+score = svm.predict_proba([H])
+print(score)
+
 cv2.putText(image, mapping[result], (10, 35), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 0), 2)
 plt.imshow(image)
+plt.show()
+
+cv2.putText(image_test, mapping[result], (10, 35), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 0), 2)
+plt.imshow(cv2.cvtColor(image_test, cv2.COLOR_BGR2RGB))
 plt.show()
