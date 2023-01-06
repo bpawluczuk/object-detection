@@ -2,6 +2,7 @@ import cv2
 import os
 import matplotlib.pyplot as plt
 import skimage
+import joblib
 import numpy as np
 
 from sklearn.linear_model import SGDClassifier
@@ -10,7 +11,6 @@ from skimage import feature
 from skimage import exposure
 
 from sklearn import svm
-from sklearn.externals import joblib
 
 mapping = {}
 images = []
