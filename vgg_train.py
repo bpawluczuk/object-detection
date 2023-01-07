@@ -125,8 +125,8 @@ history = model.fit(train_ds,
                     epochs=epochs,
                     validation_data=validation_ds)
 
-model.save("model")
-print("save model")
+model.save("model/vgg")
+print("Save model")
 
 # =========================================================
 acc = history.history['accuracy']
@@ -153,7 +153,7 @@ plt.show()
 
 # =========================================================
 
-img_path = "dataset/001/17.jpg"
+img_path = "dataset/001/112_imagea.jpg"
 
 img = tf.keras.utils.load_img(
     img_path, target_size=(img_height, img_width)
