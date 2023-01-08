@@ -81,16 +81,16 @@ gamma_init = keras.initializers.RandomNormal(mean=0.0, stddev=0.02)
 
 input = Input(shape=IMAGE_SHAPE)
 
-# x = RandomFlip("horizontal", input_shape=IMAGE_SHAPE)(input)
-# x = RandomRotation(0.1)(x)
-# x = RandomZoom(0.1)(x)
+x = RandomFlip("horizontal", input_shape=IMAGE_SHAPE)(input)
+x = RandomRotation(0.1)(x)
+x = RandomZoom(0.1)(x)
 
-x = Rescaling(1. / 255)(input)
+x = Rescaling(1. / 255)(x)
 
-# x = Conv2D(32, kernel_size=3, padding='same', activation='relu')(x)
-# x = Conv2D(32, kernel_size=3, padding='same', activation='relu')(x)
-# x = Conv2D(32, kernel_size=3, padding='same', activation='relu')(x)
-# x = MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(x)
+x = Conv2D(32, kernel_size=3, padding='same', activation='relu')(x)
+x = Conv2D(32, kernel_size=3, padding='same', activation='relu')(x)
+x = Conv2D(32, kernel_size=3, padding='same', activation='relu')(x)
+x = MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(x)
 
 x = Conv2D(64, kernel_size=3, padding='same', activation='relu')(x)
 x = Conv2D(64, kernel_size=3, padding='same', activation='relu')(x)
@@ -158,7 +158,7 @@ plt.show()
 
 # =========================================================
 
-img_path = "dataset/001/112_imagea.jpg"
+img_path = "dataset/001/1_001.jpg"
 
 img = tf.keras.utils.load_img(
     img_path, target_size=(img_height, img_width)
