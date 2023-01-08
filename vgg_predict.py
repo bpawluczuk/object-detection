@@ -11,15 +11,16 @@ sns.set()
 startTime = time.time()
 
 # ===============================================================================================
-img_height = 124
-img_width = 124
+img_height = 256
+img_width = 256
 
 model = keras.models.load_model('model/vgg')
 print("Load model...")
 # ===============================================================================================
 images_predicted = []
 
-class_names = ["000", "001", "002", "003", "004", "005"]
+# class_names = ["000", "001", "002", "003", "004", "005"]
+class_names = ["001", "002", "003", "004", "005", "006"]
 image = cv2.imread("images/shower_all.jpg")
 # image = cv2.imread("images/003.jpg")
 # image = cv2.imread("images/002.jpg")
@@ -27,7 +28,7 @@ image = cv2.imread("images/shower_all.jpg")
 # image = cv2.imread("images/004.jpg")
 # image = cv2.imread("images/005.jpg")
 
-# Scale down to 25%
+# Scale down
 p = 0.35
 w = int(image.shape[1] * p)
 h = int(image.shape[0] * p)

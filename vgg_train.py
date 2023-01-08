@@ -31,12 +31,12 @@ except:
 # data_dir = "dataset_test"
 data_dir = "dataset"
 
-batch_size = 4
+batch_size = 12
 num_classes = 6
-epochs = 300
+epochs = 100
 
-img_height = 124
-img_width = 124
+img_height = 256
+img_width = 256
 channels = 3
 
 IMAGE_SHAPE = (img_height, img_width, channels)
@@ -87,10 +87,10 @@ input = Input(shape=IMAGE_SHAPE)
 
 x = Rescaling(1. / 255)(input)
 
-x = Conv2D(32, kernel_size=3, padding='same', activation='relu')(x)
-x = Conv2D(32, kernel_size=3, padding='same', activation='relu')(x)
-x = Conv2D(32, kernel_size=3, padding='same', activation='relu')(x)
-x = MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(x)
+# x = Conv2D(32, kernel_size=3, padding='same', activation='relu')(x)
+# x = Conv2D(32, kernel_size=3, padding='same', activation='relu')(x)
+# x = Conv2D(32, kernel_size=3, padding='same', activation='relu')(x)
+# x = MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(x)
 
 x = Conv2D(64, kernel_size=3, padding='same', activation='relu')(x)
 x = Conv2D(64, kernel_size=3, padding='same', activation='relu')(x)
@@ -100,6 +100,11 @@ x = MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(x)
 x = Conv2D(128, kernel_size=3, padding='same', activation='relu')(x)
 x = Conv2D(128, kernel_size=3, padding='same', activation='relu')(x)
 x = Conv2D(128, kernel_size=3, padding='same', activation='relu')(x)
+x = MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(x)
+
+x = Conv2D(256, kernel_size=3, padding='same', activation='relu')(x)
+x = Conv2D(256, kernel_size=3, padding='same', activation='relu')(x)
+x = Conv2D(256, kernel_size=3, padding='same', activation='relu')(x)
 x = MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(x)
 
 x = BatchNormalization()(x)
