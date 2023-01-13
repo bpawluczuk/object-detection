@@ -1,6 +1,6 @@
 .idea/
 /output/
-/dataset/
+/_dataset/
 /flowers/
 /images/
 /model/
@@ -12,3 +12,4 @@
 /dataset_hog_test/
 /garbage/
 /temp/
+/dataset/

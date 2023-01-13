@@ -28,7 +28,7 @@ except:
     pass
 # =========================================================
 
-data_dir = "dataset"
+data_dir = "_dataset"
 
 batch_size = 4
 num_classes = 6
@@ -154,8 +154,8 @@ plt.title('Training and Validation Loss')
 plt.show()
 # =========================================================
 
-img_path = "dataset/004/16_imagea.jpg"
-# img_path = "dataset/train/005/55_image.jpg"
+img_path = "_dataset/004/16_imagea.jpg"
+# img_path = "_dataset/train/005/55_image.jpg"
 
 img = tf.keras.utils.load_img(
     img_path, target_size=(img_height, img_width)

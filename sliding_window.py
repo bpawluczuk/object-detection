@@ -30,7 +30,7 @@ def sliding_window(image, window_size, step_size):
             yield x, y, image[y: y + window_size[1], x: x + window_size[0]]
 
 
-image = cv2.imread("images/test.jpg")
+image = cv2.imread("images/shower_test.jpg")
 print("oryginal: ", image.shape[0:2])
 image = imutils.resize(image, width=min(600, image.shape[1]))
 min_wdw_sz = (64, 128)

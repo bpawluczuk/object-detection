@@ -20,8 +20,9 @@ print("Load model...")
 images_predicted = []
 
 # class_names = ["000", "001", "002", "003", "004", "005"]
-class_names = ["001", "002", "003", "004", "005", "006"]
-image = cv2.imread("images/shower_all.jpg")
+# class_names = ["001", "002", "003", "004", "005", "006"]
+class_names = ["001", "002"]
+image = cv2.imread("images/shower_test.jpg")
 # image = cv2.imread("images/003.jpg")
 # image = cv2.imread("images/002.jpg")
 # image = cv2.imread("images/003.jpg")
@@ -29,15 +30,16 @@ image = cv2.imread("images/shower_all.jpg")
 # image = cv2.imread("images/005.jpg")
 
 # Scale down
-p = 0.35
-w = int(image.shape[1] * p)
-h = int(image.shape[0] * p)
-image = cv2.resize(image, (w, h))
+# p = 0.35
+# w = int(image.shape[1] * p)
+# h = int(image.shape[0] * p)
+# image = cv2.resize(image, (w, h))
 
 print("Search...")
 ss = cv2.ximgproc.segmentation.createSelectiveSearchSegmentation()
 ss.setBaseImage(image)
 ss.switchToSelectiveSearchFast()
+# ss.switchToSelectiveSearchQuality()
 rects = ss.process()
 
 (H, W) = image.shape[:2]
@@ -55,6 +57,9 @@ inc = 0
 for (x, y, w, h) in rects:
 
     inc_total = inc_total + 1
+
+    if w / float(W) < 0.07 or w / float(W) > 0.1 or h / float(H) < 0.3:
+        continue
 
     # if w / float(W) < 0.4 or w / float(W) > 0.6 or h / float(H) < 0.7:
     #     continue
@@ -74,7 +79,7 @@ for (x, y, w, h) in rects:
     score = tf.nn.softmax(predictions[0])
     print(score)
 
-    if class_names[np.argmax(score)] == "003" and (100 * np.max(score)) >= 34:
+    if class_names[np.argmax(score)] == "002" and (100 * np.max(score)) >= 72.5:
         inc_pred = inc_pred + 1
 
         print(
@@ -87,8 +92,8 @@ for (x, y, w, h) in rects:
 
         images_predicted.append(roi)
 
-        inc = inc + 1
-        cv2.imwrite("garbage/" + str(inc) + "_g.jpg", image_out)
+        # inc = inc + 1
+        # cv2.imwrite("garbage/" + str(inc) + "_g.jpg", image_out)
 
 predict_time_end = time.time()
 executionTime = (time.time() - startTime)
