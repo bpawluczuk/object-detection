@@ -4,8 +4,6 @@ from tensorflow import keras
 import tensorflow as tf
 from GradCAM import GradCAM
 import matplotlib.pyplot as plt
-# from vis.visualization import visualize_cam
-# from vis.utils import utils
 
 # ===============================================
 model = keras.models.load_model('model/vgg')
@@ -17,7 +15,7 @@ img_size = (256, 256)
 last_conv_layer_name = "conv2d_8"
 
 # The local path to our target image
-img_path = "images/001.jpg"
+img_path = "images/00093.jpg"
 
 image = cv2.imread(img_path)
 image = cv2.resize(image, img_size)
@@ -41,24 +39,10 @@ print(heatmap.shape, image.shape)
 
 (heatmap, output) = icam.overlay_heatmap(heatmap, image, alpha=0.5)
 
+fig = plt.figure(figsize=(20, 20))
 fig, ax = plt.subplots(1, 3)
 
 ax[0].imshow(heatmap)
 ax[1].imshow(image)
 ax[2].imshow(output)
 plt.show()
-
-# Utility to search for layer index by name.
-# Alternatively we can specify this as -1 since it corresponds to the last layer.
-# layer_idx = utils.find_layer_idx(model, 'predictions')
-# Swap softmax with linear
-# model.layers[layer_idx].activation = keras.activations.linear
-# model = utils.apply_modifications(model)
-#
-# penultimate_layer_idx = utils.find_layer_idx(model, "conv2d_8")
-# class_idx = class_idxs_sorted[0]
-# seed_input = image
-# grad_top1 = visualize_cam(model, layer_idx, class_idx, seed_input,
-#                           penultimate_layer_idx=penultimate_layer_idx,
-#                           backprop_modifier=None,
-#                           grad_modifier=None)

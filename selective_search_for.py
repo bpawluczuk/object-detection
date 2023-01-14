@@ -5,8 +5,6 @@ name = "002"
 source_dir = "temp/" + name + "test/"
 dest_dir = "temp/" + name + "out/"
 
-# source_dir = "temp/test/"
-
 inc = 0
 n = 0
 for file in os.listdir(source_dir):
@@ -44,11 +42,11 @@ for file in os.listdir(source_dir):
         # if (w / float(W) < 0.6 or w / float(W) > 0.7) or (h / float(H) < 0.7):
         #     continue
 
-        if w / float(W) < 0.5 or h / float(H) < 0.4:
+        if w / float(W) < 0.4 or h / float(H) < 0.2:
             continue
 
         inc = inc + 1
         roi = image[y:y + h, x:x + w]
-        dest_path = dest_dir + str(inc) + "_" + name + "2.jpg"
+        dest_path = dest_dir + str(inc) + "_" + name + ".jpg"
         cv2.imwrite(dest_path, roi)
         print(dest_path)

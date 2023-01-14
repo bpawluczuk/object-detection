@@ -1,11 +1,5 @@
-import PIL
-import scipy
 import tensorflow as tf
-import datetime
-import cv2
-import numpy as np
 import seaborn as sns
-import keras.backend as K
 
 from tensorflow import keras
 from keras.layers import *
@@ -35,12 +29,12 @@ except:
 data_dir = "dataset"
 data_valid_dir = "dataset_valid"
 
-batch_size = 2
+batch_size = 8
 num_classes = 2
-epochs = 120
+epochs = 100
 
-img_height = 256
-img_width = 256
+img_height = 512
+img_width = 512
 channels = 3
 
 IMAGE_SHAPE = (img_height, img_width, channels)
@@ -119,6 +113,11 @@ x = Conv2D(256, kernel_size=3, padding='same', activation='relu')(x)
 x = Conv2D(256, kernel_size=3, padding='same', activation='relu')(x)
 x = MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(x)
 
+x = Conv2D(512, kernel_size=3, padding='same', activation='relu')(x)
+x = Conv2D(512, kernel_size=3, padding='same', activation='relu')(x)
+x = Conv2D(512, kernel_size=3, padding='same', activation='relu')(x)
+x = MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(x)
+
 x = BatchNormalization()(x)
 
 x = Dropout(0.1)(x)
@@ -170,20 +169,20 @@ plt.show()
 
 # =========================================================
 
-img_path = "_dataset/001/1_001.jpg"
-
-img = tf.keras.utils.load_img(
-    img_path, target_size=(img_height, img_width)
-)
-img_array = tf.keras.utils.img_to_array(img)
-img_array = tf.expand_dims(img_array, 0)  # Create a batch
-
-predictions = model.predict(img_array)
-score = tf.nn.softmax(predictions[0])
-
-print(
-    "This image most likely belongs to {} with a {:.2f} percent confidence."
-    .format(class_names[np.argmax(score)], 100 * np.max(score))
-)
-
-print(score)
+# img_path = "_dataset/001/1_001.jpg"
+#
+# img = tf.keras.utils.load_img(
+#     img_path, target_size=(img_height, img_width)
+# )
+# img_array = tf.keras.utils.img_to_array(img)
+# img_array = tf.expand_dims(img_array, 0)  # Create a batch
+#
+# predictions = model.predict(img_array)
+# score = tf.nn.softmax(predictions[0])
+#
+# print(
+#     "This image most likely belongs to {} with a {:.2f} percent confidence."
+#     .format(class_names[np.argmax(score)], 100 * np.max(score))
+# )
+#
+# print(score)
