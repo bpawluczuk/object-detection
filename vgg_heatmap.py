@@ -10,12 +10,12 @@ model = keras.models.load_model('model/vgg')
 print("Load model...")
 # ===============================================
 
-img_size = (256, 256)
+img_size = (512, 512)
 
-last_conv_layer_name = "conv2d_8"
+last_conv_layer_name = "conv2d_17"
 
 # The local path to our target image
-img_path = "images/00093.jpg"
+img_path = "images/001.jpg"
 
 image = cv2.imread(img_path)
 image = cv2.resize(image, img_size)

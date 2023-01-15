@@ -1,3 +1,4 @@
+import numpy as np
 import tensorflow as tf
 import seaborn as sns
 
@@ -29,9 +30,9 @@ except:
 data_dir = "dataset"
 data_valid_dir = "dataset_valid"
 
-batch_size = 8
-num_classes = 2
-epochs = 100
+batch_size = 4
+num_classes = 3
+epochs = 20
 
 img_height = 512
 img_width = 512
@@ -42,7 +43,7 @@ IMAGE_SHAPE = (img_height, img_width, channels)
 
 train_ds = tf.keras.utils.image_dataset_from_directory(
     data_dir,
-    validation_split=0.3,
+    validation_split=0.2,
     subset="training",
     shuffle=True,
     seed=1,
@@ -51,7 +52,7 @@ train_ds = tf.keras.utils.image_dataset_from_directory(
 
 validation_ds = tf.keras.utils.image_dataset_from_directory(
     data_dir,
-    validation_split=0.3,
+    validation_split=0.2,
     subset="validation",
     shuffle=True,
     seed=1,
@@ -82,8 +83,8 @@ for image_batch, labels_batch in train_ds:
 # =========================================================
 
 # optimizer = Adam(learning_rate=1e-6, beta_1=0.5)
-optimizer = SGD(learning_rate=1e-6, momentum=0.9)
-# optimizer = SGD(learning_rate=2e-5, momentum=0.9)
+# optimizer = SGD(learning_rate=1e-6, momentum=0.9)
+optimizer = SGD(learning_rate=2e-5, momentum=0.9)
 
 kernel_init = keras.initializers.RandomNormal(mean=0.0, stddev=0.02)
 gamma_init = keras.initializers.RandomNormal(mean=0.0, stddev=0.02)
@@ -92,25 +93,35 @@ gamma_init = keras.initializers.RandomNormal(mean=0.0, stddev=0.02)
 
 input = Input(shape=IMAGE_SHAPE)
 
-# x = RandomFlip("horizontal", input_shape=IMAGE_SHAPE)(input)
-# x = RandomRotation(0.2)(x)
-# x = RandomZoom(0.2)(x)
+x = RandomFlip("horizontal", input_shape=IMAGE_SHAPE)(input)
+x = RandomRotation(0.2)(x)
+x = RandomZoom(0.2)(x)
 
-x = Rescaling(1. / 255)(input)
-
-x = Conv2D(64, kernel_size=3, padding='same', activation='relu')(x)
-x = Conv2D(64, kernel_size=3, padding='same', activation='relu')(x)
-x = Conv2D(64, kernel_size=3, padding='same', activation='relu')(x)
-x = MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(x)
+x = Rescaling(1. / 255)(x)
 
 x = Conv2D(128, kernel_size=3, padding='same', activation='relu')(x)
 x = Conv2D(128, kernel_size=3, padding='same', activation='relu')(x)
 x = Conv2D(128, kernel_size=3, padding='same', activation='relu')(x)
 x = MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(x)
 
+x = Conv2D(128, kernel_size=3, padding='same', activation='relu')(x)
+x = Conv2D(128, kernel_size=3, padding='same', activation='relu')(x)
+x = Conv2D(128, kernel_size=3, padding='same', activation='relu')(x)
+x = MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(x)
+
 x = Conv2D(256, kernel_size=3, padding='same', activation='relu')(x)
 x = Conv2D(256, kernel_size=3, padding='same', activation='relu')(x)
 x = Conv2D(256, kernel_size=3, padding='same', activation='relu')(x)
+x = MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(x)
+
+x = Conv2D(256, kernel_size=3, padding='same', activation='relu')(x)
+x = Conv2D(256, kernel_size=3, padding='same', activation='relu')(x)
+x = Conv2D(256, kernel_size=3, padding='same', activation='relu')(x)
+x = MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(x)
+
+x = Conv2D(512, kernel_size=3, padding='same', activation='relu')(x)
+x = Conv2D(512, kernel_size=3, padding='same', activation='relu')(x)
+x = Conv2D(512, kernel_size=3, padding='same', activation='relu')(x)
 x = MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(x)
 
 x = Conv2D(512, kernel_size=3, padding='same', activation='relu')(x)
@@ -120,12 +131,12 @@ x = MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(x)
 
 x = BatchNormalization()(x)
 
-x = Dropout(0.1)(x)
+x = Dropout(0.2)(x)
 x = Flatten()(x)
 
+x = Dense(256, activation='relu')(x)
 x = Dense(128, activation='relu')(x)
 x = Dense(64, activation='relu')(x)
-x = Dense(32, activation='relu')(x)
 
 output = Dense(num_classes, "softmax", name="predictions")(x)
 
@@ -169,20 +180,38 @@ plt.show()
 
 # =========================================================
 
-# img_path = "_dataset/001/1_001.jpg"
-#
-# img = tf.keras.utils.load_img(
-#     img_path, target_size=(img_height, img_width)
-# )
-# img_array = tf.keras.utils.img_to_array(img)
-# img_array = tf.expand_dims(img_array, 0)  # Create a batch
-#
-# predictions = model.predict(img_array)
-# score = tf.nn.softmax(predictions[0])
-#
-# print(
-#     "This image most likely belongs to {} with a {:.2f} percent confidence."
-#     .format(class_names[np.argmax(score)], 100 * np.max(score))
-# )
-#
-# print(score)
+img_path = "dataset/001/34_g.jpg"
+
+img = tf.keras.utils.load_img(
+    img_path, target_size=(img_height, img_width)
+)
+img_array = tf.keras.utils.img_to_array(img)
+img_array = tf.expand_dims(img_array, 0)  # Create a batch
+
+predictions = model.predict(img_array)
+score = tf.nn.softmax(predictions[0])
+
+print(
+    "This image most likely belongs to {} with a {:.2f} percent confidence."
+    .format(class_names[np.argmax(score)], 100 * np.max(score))
+)
+
+print(score)
+
+img_path = "dataset/002/52_g.jpg"
+
+img = tf.keras.utils.load_img(
+    img_path, target_size=(img_height, img_width)
+)
+img_array = tf.keras.utils.img_to_array(img)
+img_array = tf.expand_dims(img_array, 0)  # Create a batch
+
+predictions = model.predict(img_array)
+score = tf.nn.softmax(predictions[0])
+
+print(
+    "This image most likely belongs to {} with a {:.2f} percent confidence."
+    .format(class_names[np.argmax(score)], 100 * np.max(score))
+)
+
+print(score)
