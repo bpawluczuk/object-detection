@@ -10,12 +10,14 @@ model = keras.models.load_model('model/vgg')
 print("Load model...")
 # ===============================================
 
-img_size = (512, 512)
+img_height = 512
+img_width = 512
+img_size = (img_height, img_width)
 
-last_conv_layer_name = "conv2d_17"
+last_conv_layer_name = "conv2d_8"
 
 # The local path to our target image
-img_path = "images/001.jpg"
+img_path = "dataset/001/1.jpg"
 
 image = cv2.imread(img_path)
 image = cv2.resize(image, img_size)
@@ -30,11 +32,11 @@ for idx in range(len(model.layers)):
 
 icam = GradCAM(model, i, last_conv_layer_name)
 heatmap = icam.compute_heatmap(img_array)
-heatmap = cv2.resize(heatmap, (256, 256))
+heatmap = cv2.resize(heatmap, img_size)
 
 image = cv2.imread(img_path)
 image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-image = cv2.resize(image, (256, 256))
+image = cv2.resize(image, img_size)
 print(heatmap.shape, image.shape)
 
 (heatmap, output) = icam.overlay_heatmap(heatmap, image, alpha=0.5)

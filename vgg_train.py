@@ -32,7 +32,7 @@ data_valid_dir = "dataset_valid"
 
 batch_size = 4
 num_classes = 2
-epochs = 20
+epochs = 60
 
 img_height = 512
 img_width = 512
@@ -82,9 +82,9 @@ for image_batch, labels_batch in train_ds:
 
 # =========================================================
 
-# optimizer = Adam(learning_rate=1e-6, beta_1=0.5)
+optimizer = Adam(learning_rate=1e-6, beta_1=0.5)
 # optimizer = SGD(learning_rate=1e-6, momentum=0.9)
-optimizer = SGD(learning_rate=2e-5, momentum=0.9)
+# optimizer = SGD(learning_rate=2e-5, momentum=0.9)
 
 kernel_init = keras.initializers.RandomNormal(mean=0.0, stddev=0.02)
 gamma_init = keras.initializers.RandomNormal(mean=0.0, stddev=0.02)
@@ -93,16 +93,11 @@ gamma_init = keras.initializers.RandomNormal(mean=0.0, stddev=0.02)
 
 input = Input(shape=IMAGE_SHAPE)
 
-x = RandomFlip("horizontal", input_shape=IMAGE_SHAPE)(input)
-x = RandomRotation(0.2)(x)
-x = RandomZoom(0.2)(x)
+# x = RandomFlip("horizontal", input_shape=IMAGE_SHAPE)(input)
+# x = RandomRotation(0.2)(x)
+# x = RandomZoom(0.2)(x)
 
-x = Rescaling(1. / 255)(x)
-
-x = Conv2D(128, kernel_size=3, padding='same', activation='relu')(x)
-x = Conv2D(128, kernel_size=3, padding='same', activation='relu')(x)
-x = Conv2D(128, kernel_size=3, padding='same', activation='relu')(x)
-x = MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(x)
+x = Rescaling(1. / 255)(input)
 
 x = Conv2D(128, kernel_size=3, padding='same', activation='relu')(x)
 x = Conv2D(128, kernel_size=3, padding='same', activation='relu')(x)
@@ -112,16 +107,6 @@ x = MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(x)
 x = Conv2D(256, kernel_size=3, padding='same', activation='relu')(x)
 x = Conv2D(256, kernel_size=3, padding='same', activation='relu')(x)
 x = Conv2D(256, kernel_size=3, padding='same', activation='relu')(x)
-x = MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(x)
-
-x = Conv2D(256, kernel_size=3, padding='same', activation='relu')(x)
-x = Conv2D(256, kernel_size=3, padding='same', activation='relu')(x)
-x = Conv2D(256, kernel_size=3, padding='same', activation='relu')(x)
-x = MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(x)
-
-x = Conv2D(512, kernel_size=3, padding='same', activation='relu')(x)
-x = Conv2D(512, kernel_size=3, padding='same', activation='relu')(x)
-x = Conv2D(512, kernel_size=3, padding='same', activation='relu')(x)
 x = MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(x)
 
 x = Conv2D(512, kernel_size=3, padding='same', activation='relu')(x)
@@ -134,7 +119,6 @@ x = BatchNormalization()(x)
 x = Dropout(0.2)(x)
 x = Flatten()(x)
 
-x = Dense(256, activation='relu')(x)
 x = Dense(128, activation='relu')(x)
 x = Dense(64, activation='relu')(x)
 

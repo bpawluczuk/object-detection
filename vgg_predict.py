@@ -53,6 +53,8 @@ predict_time_start = time.time()
 
 image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 output = image.copy()
+
+plt.axis('off')
 plt.imshow(output)
 plt.show()
 
@@ -64,7 +66,7 @@ for (x, y, w, h) in rects:
 
     inc_total = inc_total + 1
 
-    if w > 200 or w < 140 or h > 450 or h < 300:
+    if w > 200 or w < 160 or h > 450 or h < 360:
         continue
 
     roi = image[y:y + h, x:x + w]
@@ -82,7 +84,7 @@ for (x, y, w, h) in rects:
     # inc = inc + 1
     # cv2.imwrite("garbage/" + str(inc) + "_g.jpg", image_predict)
 
-    if class_names[np.argmax(score)] == "001" and (100 * np.max(score)) >= 45:
+    if class_names[np.argmax(score)] == "002" and (100 * np.max(score)) >= 65:
         inc_pred = inc_pred + 1
 
         print(
@@ -113,5 +115,6 @@ print("")
 print("Total: ", inc_total)
 print("Predict: ", inc_pred)
 
+plt.axis('off')
 plt.imshow(output)
 plt.show()
