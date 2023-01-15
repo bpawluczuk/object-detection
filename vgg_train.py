@@ -31,7 +31,7 @@ data_dir = "dataset"
 data_valid_dir = "dataset_valid"
 
 batch_size = 4
-num_classes = 3
+num_classes = 2
 epochs = 20
 
 img_height = 512

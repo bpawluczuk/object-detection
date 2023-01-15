@@ -7,12 +7,18 @@ import time
 import matplotlib.pyplot as plt
 from tensorflow import keras
 
+from Canvas import Canvas
+
 sns.set()
 startTime = time.time()
 
 # ===============================================================================================
 img_height = 512
 img_width = 512
+channels = 3
+CANVAS_SHAPE = (img_height, img_width, channels)
+
+canvas = Canvas(CANVAS_SHAPE)
 
 model = keras.models.load_model('model/vgg')
 print("Load model...")
@@ -21,14 +27,14 @@ print("Load model...")
 images_predicted = []
 score_predicted = []
 
-class_names = ["001", "002", "003"]
-image = cv2.imread("images/shower_test.jpg")
+class_names = ["001", "002"]
+image = cv2.imread("images/test_shape.jpg")
 
 # Scale down
-p = 0.50
-w = int(image.shape[1] * p)
-h = int(image.shape[0] * p)
-image = cv2.resize(image, (w, h))
+# p = 0.50
+# w = int(image.shape[1] * p)
+# h = int(image.shape[0] * p)
+# image = cv2.resize(image, (w, h))
 
 print("Search...")
 
@@ -58,37 +64,23 @@ for (x, y, w, h) in rects:
 
     inc_total = inc_total + 1
 
-    # if w > 400 or w < 150 or h > 1000 or h < 600:
-    #     continue
-
-    if w > 110 or w < 80 or h > 450 or h < 200:
+    if w > 200 or w < 140 or h > 450 or h < 300:
         continue
-
-    # if w / float(W) < 0.05 or w / float(W) > 0.1 or h / float(H) < 0.3:
-    #     continue
-
-    # if w / float(W) < 0.4 or w / float(W) > 0.6 or h / float(H) < 0.7:
-    #     continue
-
-    # if w / float(W) < 0.03 or w / float(W) > 0.06 or h / float(H) < 0.05:
-    #     continue
 
     roi = image[y:y + h, x:x + w]
     roi = cv2.cvtColor(roi, cv2.COLOR_BGR2RGB)
 
-    image_out = roi.copy()
+    image_predict = canvas.paste_to_canvas(roi.copy())
 
-    roi = cv2.resize(roi, (img_height, img_width))
-
-    img_array = tf.keras.utils.img_to_array(roi)
+    img_array = tf.keras.utils.img_to_array(image_predict)
     img_array = tf.expand_dims(img_array, 0)
 
     predictions = model.predict(img_array)
     score = tf.nn.softmax(predictions[0])
     print(score)
 
-    inc = inc + 1
-    cv2.imwrite("garbage/" + str(inc) + "_g.jpg", image_out)
+    # inc = inc + 1
+    # cv2.imwrite("garbage/" + str(inc) + "_g.jpg", image_predict)
 
     if class_names[np.argmax(score)] == "001" and (100 * np.max(score)) >= 45:
         inc_pred = inc_pred + 1
