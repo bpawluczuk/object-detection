@@ -31,10 +31,10 @@ class_names = ["001", "002"]
 image = cv2.imread("images/test_shape.jpg")
 
 # Scale down
-# p = 0.50
-# w = int(image.shape[1] * p)
-# h = int(image.shape[0] * p)
-# image = cv2.resize(image, (w, h))
+p = 0.20
+w = int(image.shape[1] * p)
+h = int(image.shape[0] * p)
+image = cv2.resize(image, (w, h))
 
 print("Search...")
 
@@ -66,7 +66,7 @@ for (x, y, w, h) in rects:
 
     inc_total = inc_total + 1
 
-    if w > 200 or w < 160 or h > 450 or h < 360:
+    if w > 200 * p or w < 160 * p or h > 450 * p or h < 360 * p:
         continue
 
     roi = image[y:y + h, x:x + w]
@@ -81,10 +81,10 @@ for (x, y, w, h) in rects:
     score = tf.nn.softmax(predictions[0])
     print(score)
 
-    # inc = inc + 1
-    # cv2.imwrite("garbage/" + str(inc) + "_g.jpg", image_predict)
+    inc = inc + 1
+    cv2.imwrite("garbage/" + str(inc) + "_g.jpg", image_predict)
 
-    if class_names[np.argmax(score)] == "002" and (100 * np.max(score)) >= 65:
+    if class_names[np.argmax(score)] == "001" and (100 * np.max(score)) >= 55:
         inc_pred = inc_pred + 1
 
         print(
@@ -93,7 +93,8 @@ for (x, y, w, h) in rects:
         )
 
         color = [random.randint(0, 255) for j in range(0, 3)]
-        cv2.rectangle(output, (x, y), (x + w, y + h), color, 2)
+        color = (0, 255, 0)
+        cv2.rectangle(output, (x, y), (x + w, y + h), color, 1)
 
         images_predicted.append(roi)
         score_predicted.append((100 * np.max(score)))
