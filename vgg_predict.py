@@ -26,12 +26,13 @@ print("Load model...")
 
 images_predicted = []
 score_predicted = []
+boxes = []
 
 class_names = ["001", "002"]
 image = cv2.imread("images/test_shape.jpg")
 
 # Scale down
-p = 0.20
+p = 0.30
 w = int(image.shape[1] * p)
 h = int(image.shape[0] * p)
 image = cv2.resize(image, (w, h))
@@ -72,6 +73,8 @@ for (x, y, w, h) in rects:
     roi = image[y:y + h, x:x + w]
     roi = cv2.cvtColor(roi, cv2.COLOR_BGR2RGB)
 
+    boxes.append((x, y, x + w, y + h))
+
     image_predict = canvas.paste_to_canvas(roi.copy())
 
     img_array = tf.keras.utils.img_to_array(image_predict)
@@ -84,7 +87,7 @@ for (x, y, w, h) in rects:
     inc = inc + 1
     cv2.imwrite("garbage/" + str(inc) + "_g.jpg", image_predict)
 
-    if class_names[np.argmax(score)] == "001" and (100 * np.max(score)) >= 55:
+    if class_names[np.argmax(score)] == "001" and (100 * np.max(score)) >= 60:
         inc_pred = inc_pred + 1
 
         print(
@@ -101,6 +104,19 @@ for (x, y, w, h) in rects:
 
         # inc = inc + 1
         # cv2.imwrite("garbage/" + str(inc) + "_g.jpg", image_out)
+
+
+# def boxes_merge(boxes, offset=10):
+#     results = []
+#
+#     for result in enumerate(results):
+#         rx, ry, rh, rw = result
+#         for box in enumerate(boxes):
+#             x, y, h, w = box
+#             if (x+offset )
+#
+#     return result
+
 
 if score_predicted:
     max_score = np.max(score_predicted)
