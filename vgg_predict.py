@@ -106,18 +106,6 @@ for (x, y, w, h) in rects:
         # cv2.imwrite("garbage/" + str(inc) + "_g.jpg", image_out)
 
 
-# def boxes_merge(boxes, offset=10):
-#     results = []
-#
-#     for result in enumerate(results):
-#         rx, ry, rh, rw = result
-#         for box in enumerate(boxes):
-#             x, y, h, w = box
-#             if (x+offset )
-#
-#     return result
-
-
 if score_predicted:
     max_score = np.max(score_predicted)
     print("Max score: ", max_score)
