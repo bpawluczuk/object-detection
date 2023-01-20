@@ -56,9 +56,9 @@ predict_time_start = time.time()
 image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 output = image.copy()
 
-plt.axis('off')
-plt.imshow(output)
-plt.show()
+# plt.axis('off')
+# plt.imshow(output)
+# plt.show()
 
 inc_total = 0
 inc_predict = 0
@@ -71,10 +71,17 @@ for (x, y, w, h) in rects:
     if w > 200 * p or w < 160 * p or h > 450 * p or h < 360 * p:
         continue
 
+    boxes.append((x, y, w, h))
+
+# ====================================================
+
+boxes_m = merge_boxes(boxes, 25, 55)
+# boxes_m = boxes
+
+for (x, y, w, h) in boxes_m:
+
     roi = image[y:y + h, x:x + w]
     roi = cv2.cvtColor(roi, cv2.COLOR_BGR2RGB)
-
-    boxes.append((x, y, x + w, y + h))
 
     image_predict = canvas.paste_to_canvas(roi.copy())
 
@@ -85,10 +92,10 @@ for (x, y, w, h) in rects:
     score = tf.nn.softmax(predictions[0])
     print(score)
 
-    inc = inc + 1
-    cv2.imwrite("garbage/" + str(inc) + "_g.jpg", image_predict)
+    # inc = inc + 1
+    # cv2.imwrite("garbage/" + str(inc) + "_g.jpg", image_predict)
 
-    if class_names[np.argmax(score)] == "001" and (100 * np.max(score)) >= 60:
+    if class_names[np.argmax(score)] == "001" and (100 * np.max(score)) >= 58:
         inc_predict = inc_predict + 1
 
         print(
@@ -103,16 +110,7 @@ for (x, y, w, h) in rects:
         images_predicted.append(roi)
         score_predicted.append((100 * np.max(score)))
 
-        # inc = inc + 1
-        # cv2.imwrite("garbage/" + str(inc) + "_g.jpg", image_out)
-
-boxes_m = merge_boxes(boxes, 25, 55)
-# boxes_m = boxes
-
-for (x, y, w, h) in boxes_m:
-    color = [random.randint(0, 255) for j in range(0, 3)]
-    color = (0, 255, 0)
-    cv2.rectangle(output, (x, y), (x + w, y + h), color, 1)
+# ====================================================
 
 if score_predicted:
     max_score = np.max(score_predicted)
