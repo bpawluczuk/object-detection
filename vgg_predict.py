@@ -36,17 +36,22 @@ class_names = ["001", "002"]
 image = cv2.imread("images/test_shape.jpg")
 
 # Scale down
-p = 0.30
-w = int(image.shape[1] * p)
-h = int(image.shape[0] * p)
+percent_of_size = 0.30
+w = int(image.shape[1] * percent_of_size)
+h = int(image.shape[0] * percent_of_size)
 image = cv2.resize(image, (w, h))
 
 # ============================ Object dimensions ========================================
 
-object_width = 100
-object_height = 100
-object_offset_width = 10
-object_offset_height = 10
+object_w = 180
+object_h = 400
+offset_w = 20
+offset_h = 40
+
+object_w = object_w * percent_of_size
+object_h = object_h * percent_of_size
+offset_w = offset_w * percent_of_size
+offset_h = offset_h * percent_of_size
 
 # ============================== Search Region ==========================================
 
@@ -82,11 +87,8 @@ for (x, y, w, h) in rects:
 
     inc_total = inc_total + 1
 
-    if w > 200 * p or w < 160 * p or h > 450 * p or h < 360 * p:
-    # if w > 200 * p or w < 160 * p or h > 450 * p or h < 360 * p:
-        continue
-
-    boxes.append((x, y, w, h))
+    if object_w - offset_w < w < object_w + offset_w and object_h - offset_h < h < object_h + offset_h:
+        boxes.append((x, y, w, h))
 
 # ============================== Predict ========================================================
 
