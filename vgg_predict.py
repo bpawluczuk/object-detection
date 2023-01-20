@@ -7,6 +7,7 @@ import time
 import matplotlib.pyplot as plt
 from tensorflow import keras
 
+from BoundingBox import merge_boxes
 from Canvas import Canvas
 
 sns.set()
@@ -60,7 +61,7 @@ plt.imshow(output)
 plt.show()
 
 inc_total = 0
-inc_pred = 0
+inc_predict = 0
 inc = 0
 
 for (x, y, w, h) in rects:
@@ -88,7 +89,7 @@ for (x, y, w, h) in rects:
     cv2.imwrite("garbage/" + str(inc) + "_g.jpg", image_predict)
 
     if class_names[np.argmax(score)] == "001" and (100 * np.max(score)) >= 60:
-        inc_pred = inc_pred + 1
+        inc_predict = inc_predict + 1
 
         print(
             "This image most likely belongs to {} with a {:.2f} percent confidence."
@@ -105,6 +106,13 @@ for (x, y, w, h) in rects:
         # inc = inc + 1
         # cv2.imwrite("garbage/" + str(inc) + "_g.jpg", image_out)
 
+boxes_m = merge_boxes(boxes, 25, 55)
+# boxes_m = boxes
+
+for (x, y, w, h) in boxes_m:
+    color = [random.randint(0, 255) for j in range(0, 3)]
+    color = (0, 255, 0)
+    cv2.rectangle(output, (x, y), (x + w, y + h), color, 1)
 
 if score_predicted:
     max_score = np.max(score_predicted)
@@ -118,7 +126,7 @@ print('Predict time in seconds: ' + str(predict_time_end - predict_time_start))
 print('Execution time in seconds: ' + str(executionTime))
 print("")
 print("Total: ", inc_total)
-print("Predict: ", inc_pred)
+print("Predict: ", inc_predict)
 
 plt.axis('off')
 plt.imshow(output)
