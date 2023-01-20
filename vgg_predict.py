@@ -13,23 +13,26 @@ from Canvas import Canvas
 sns.set()
 startTime = time.time()
 
-# ===============================================================================================
+# ============================= Classificator ============================================
+
 img_height = 512
 img_width = 512
 channels = 3
-CANVAS_SHAPE = (img_height, img_width, channels)
 
+CANVAS_SHAPE = (img_height, img_width, channels)
 canvas = Canvas(CANVAS_SHAPE)
 
 model = keras.models.load_model('model/vgg')
 print("Load model...")
-# ===============================================================================================
+
+# ======================================= Input image ===================================
 
 images_predicted = []
 score_predicted = []
 boxes = []
 
 class_names = ["001", "002"]
+
 image = cv2.imread("images/test_shape.jpg")
 
 # Scale down
@@ -37,6 +40,15 @@ p = 0.30
 w = int(image.shape[1] * p)
 h = int(image.shape[0] * p)
 image = cv2.resize(image, (w, h))
+
+# ============================ Object dimensions ========================================
+
+object_width = 100
+object_height = 100
+object_offset_width = 10
+object_offset_height = 10
+
+# ============================== Search Region ==========================================
 
 print("Search...")
 
@@ -60,6 +72,8 @@ output = image.copy()
 # plt.imshow(output)
 # plt.show()
 
+# ============================== Found Bounding Boxes ==========================================
+
 inc_total = 0
 inc_predict = 0
 inc = 0
@@ -69,11 +83,12 @@ for (x, y, w, h) in rects:
     inc_total = inc_total + 1
 
     if w > 200 * p or w < 160 * p or h > 450 * p or h < 360 * p:
+    # if w > 200 * p or w < 160 * p or h > 450 * p or h < 360 * p:
         continue
 
     boxes.append((x, y, w, h))
 
-# ====================================================
+# ============================== Predict ========================================================
 
 boxes_m = merge_boxes(boxes, 25, 55)
 # boxes_m = boxes
@@ -95,7 +110,7 @@ for (x, y, w, h) in boxes_m:
     # inc = inc + 1
     # cv2.imwrite("garbage/" + str(inc) + "_g.jpg", image_predict)
 
-    if class_names[np.argmax(score)] == "001" and (100 * np.max(score)) >= 58:
+    if class_names[np.argmax(score)] == "001" and (100 * np.max(score)) >= 50:
         inc_predict = inc_predict + 1
 
         print(
@@ -110,7 +125,7 @@ for (x, y, w, h) in boxes_m:
         images_predicted.append(roi)
         score_predicted.append((100 * np.max(score)))
 
-# ====================================================
+# =============================== Scores =====================================================
 
 if score_predicted:
     max_score = np.max(score_predicted)
