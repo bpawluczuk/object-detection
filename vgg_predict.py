@@ -33,7 +33,7 @@ boxes = []
 
 class_names = ["001", "002"]
 
-image = cv2.imread("images/test_shape.jpg")
+image = cv2.imread("images/shelf_3.jpg")
 
 # Scale down
 percent_of_size = 0.30
@@ -43,15 +43,33 @@ image = cv2.resize(image, (w, h))
 
 # ============================ Object dimensions ========================================
 
-object_w = 180
-object_h = 400
-offset_w = 20
-offset_h = 40
+object_w = 200
+object_h = 450
+offset_w = 25
+offset_h = 25
 
-object_w = object_w * percent_of_size
-object_h = object_h * percent_of_size
-offset_w = offset_w * percent_of_size
-offset_h = offset_h * percent_of_size
+# object_w = 260
+# object_h = 640
+# offset_w = 30
+# offset_h = 40
+
+object_w = int(object_w * percent_of_size)
+object_h = int(object_h * percent_of_size)
+offset_w = int(offset_w * percent_of_size)
+offset_h = int(offset_h * percent_of_size)
+
+box_offset_w = int(object_w / 4)
+box_offset_h = int(object_h / 4)
+
+origin_w = int(200)
+origin_h = int(450)
+origin_offset_w = int(20)
+origin_offset_h = int(20)
+
+origin_w = int(origin_w * percent_of_size)
+origin_h = int(origin_h * percent_of_size)
+origin_offset_w = int(origin_offset_w * percent_of_size)
+origin_offset_h = int(origin_offset_h * percent_of_size)
 
 # ============================== Search Region ==========================================
 
@@ -80,6 +98,7 @@ output = image.copy()
 # ============================== Found Bounding Boxes ==========================================
 
 inc_total = 0
+inc_total_boxes = 0
 inc_predict = 0
 inc = 0
 
@@ -89,10 +108,20 @@ for (x, y, w, h) in rects:
 
     if object_w - offset_w < w < object_w + offset_w and object_h - offset_h < h < object_h + offset_h:
         boxes.append((x, y, w, h))
+        inc_total_boxes = inc_total_boxes + 1
 
 # ============================== Predict ========================================================
 
-boxes_m = merge_boxes(boxes, 25, 55)
+boxes_m = merge_boxes(
+    boxes=boxes,
+    offset_x=box_offset_w,
+    offset_y=box_offset_h,
+    origin_w=origin_w,
+    origin_h=origin_h,
+    origin_offset_w=origin_offset_w,
+    origin_offset_h=origin_offset_h,
+)
+
 # boxes_m = boxes
 
 for (x, y, w, h) in boxes_m:
@@ -115,10 +144,10 @@ for (x, y, w, h) in boxes_m:
     if class_names[np.argmax(score)] == "001" and (100 * np.max(score)) >= 50:
         inc_predict = inc_predict + 1
 
-        print(
-            "This image most likely belongs to {} with a {:.2f} percent confidence."
-            .format(class_names[np.argmax(score)], 100 * np.max(score))
-        )
+        # print(
+        #     "This image most likely belongs to {} with a {:.2f} percent confidence."
+        #     .format(class_names[np.argmax(score)], 100 * np.max(score))
+        # )
 
         color = [random.randint(0, 255) for j in range(0, 3)]
         color = (0, 255, 0)
@@ -141,6 +170,7 @@ print('Predict time in seconds: ' + str(predict_time_end - predict_time_start))
 print('Execution time in seconds: ' + str(executionTime))
 print("")
 print("Total: ", inc_total)
+print("Total Boxes: ", inc_total_boxes)
 print("Predict: ", inc_predict)
 
 plt.axis('off')
