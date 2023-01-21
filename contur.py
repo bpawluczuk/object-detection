@@ -2,6 +2,8 @@ import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 
+from Canvas import Canvas
+
 
 def get_contour_areas(contours):
     all_areas = []
@@ -12,7 +14,7 @@ def get_contour_areas(contours):
 
 
 # The local path to our target image
-img_path = "images/s1.jpg"
+img_path = "images/s11.jpg"
 
 # load the input image
 source_image = cv2.imread(img_path)
@@ -87,5 +89,15 @@ cv2.rectangle(masked, (x, y), (x + w, y + h), color, 2)
 plt.imshow(masked)
 plt.show()
 
-# result = canvas.paste_to_canvas(masked)
+cropped_image = masked[y:y + h, x:x + w]
+
+plt.imshow(cropped_image)
+plt.show()
+
+canvas = Canvas((512, 512, 3))
+result = canvas.paste_to_canvas(cropped_image)
+
+plt.imshow(result)
+plt.show()
+
 # cv2.imwrite("dataset/001/1.jpg", result)
