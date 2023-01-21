@@ -101,7 +101,7 @@ for (x, y, w, h) in rects:
         inc_total_boxes = inc_total_boxes + 1
 
 
-# ============================== Predict ========================================================
+# ============================== Prepare Bounding Boxes ==========================================
 
 boxes = sort_boxes(boxes)
 
@@ -116,6 +116,8 @@ boxes_m = merge_boxes(
 
 # boxes_m = boxes
 
+# ============================== Predict ========================================================
+
 for (x, y, w, h) in boxes_m:
 
     roi = image[y:y + h, x:x + w]
@@ -128,7 +130,7 @@ for (x, y, w, h) in boxes_m:
 
     predictions = model.predict(img_array)
     score = tf.nn.softmax(predictions[0])
-    # print(score)
+    print(score)
 
     # inc = inc + 1
     # cv2.imwrite("garbage/" + str(inc) + "_g.jpg", image_predict)
