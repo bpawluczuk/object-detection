@@ -12,7 +12,7 @@ def get_contour_areas(contours):
 
 
 # The local path to our target image
-img_path = "images/j1.jpg"
+img_path = "images/s1.jpg"
 
 # load the input image
 source_image = cv2.imread(img_path)
@@ -33,8 +33,8 @@ print("Number of contours detected:", len(contours))
 
 # display the image with drawn contour and convex hull
 
-plt.imshow(gray, cmap="gray")
-plt.show()
+# plt.imshow(gray, cmap="gray")
+# plt.show()
 
 # Find the convex hull for all the contours
 for cnt in contours:
@@ -42,30 +42,31 @@ for cnt in contours:
     img = cv2.drawContours(source_image, [cnt], 0, (0, 255, 0), 2)
     # img = cv2.drawContours(img, [hull], 0, (255, 0, 0), 3)
 
-plt.imshow(img, cmap="gray")
-plt.show()
+# plt.imshow(img, cmap="gray")
+# plt.show()
 
 sorted_contours = sorted(contours, key=cv2.contourArea, reverse=True)
 largest_item = sorted_contours[0]
 
 img = cv2.drawContours(source_image, largest_item, -1, (0, 0, 255), 10)
-plt.imshow(img, cmap="gray")
-plt.show()
+
+# plt.imshow(img, cmap="gray")
+# plt.show()
 
 mask = np.ones(source_image.shape[:2], np.uint8)
 mask = cv2.drawContours(mask, largest_item, -1, (0, 0, 0), 1)
 
 cv2.fillConvexPoly(mask, largest_item, 255)
 
-plt.imshow(mask)
-plt.show()
+# plt.imshow(mask)
+# plt.show()
 
 mask_inv = cv2.bitwise_not(mask)
 
-plt.imshow(mask_inv)
-plt.show()
+# plt.imshow(mask_inv)
+# plt.show()
 
-result = cv2.imread("images/j1.jpg")
+result = cv2.imread(img_path)
 result = cv2.cvtColor(result, cv2.COLOR_BGR2RGB)
 
 # plt.imshow(result)
