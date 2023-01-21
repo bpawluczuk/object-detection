@@ -33,13 +33,16 @@ def sort_boxes(rectangles, result=None):
     if result is None:
         result = []
 
-    area = 0
+    _, _, zw, zh = rectangles[0]
+    area = zw * zh
+
     temp_box = ()
 
     for _, i_box in enumerate(rectangles):
         _, _, iw, ih = i_box
         i_area = iw * ih
 
+        # sort asc, desc
         if area < i_area:
             area = i_area
             temp_box = i_box
