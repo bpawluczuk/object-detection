@@ -29,7 +29,7 @@ class Canvas:
 
         y_off = round((canvas.shape[0] - new_image.shape[0]) / 2)
         x_off = round((canvas.shape[1] - new_image.shape[1]) / 2)
-        print(y_off, x_off)
+        # print(y_off, x_off)
 
         result = canvas.copy()
         result[y_off:y_off + new_image.shape[0], x_off:x_off + new_image.shape[1]] = new_image

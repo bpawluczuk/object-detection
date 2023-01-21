@@ -7,7 +7,7 @@ import time
 import matplotlib.pyplot as plt
 from tensorflow import keras
 
-from BoundingBox import merge_boxes
+from BoundingBox import merge_boxes, sort_boxes
 from Canvas import Canvas
 
 sns.set()
@@ -58,18 +58,8 @@ object_h = int(object_h * percent_of_size)
 offset_w = int(offset_w * percent_of_size)
 offset_h = int(offset_h * percent_of_size)
 
-box_offset_w = int(object_w / 4)
-box_offset_h = int(object_h / 4)
-
-origin_w = int(200)
-origin_h = int(450)
-origin_offset_w = int(20)
-origin_offset_h = int(20)
-
-origin_w = int(origin_w * percent_of_size)
-origin_h = int(origin_h * percent_of_size)
-origin_offset_w = int(origin_offset_w * percent_of_size)
-origin_offset_h = int(origin_offset_h * percent_of_size)
+box_offset_w = int(object_w / 3)
+box_offset_h = int(object_h / 3)
 
 # ============================== Search Region ==========================================
 
@@ -110,16 +100,18 @@ for (x, y, w, h) in rects:
         boxes.append((x, y, w, h))
         inc_total_boxes = inc_total_boxes + 1
 
+
 # ============================== Predict ========================================================
+
+boxes = sort_boxes(boxes)
+
+# for _, ii_box in enumerate(boxes):
+#     print(ii_box[2] * ii_box[3])
 
 boxes_m = merge_boxes(
     boxes=boxes,
     offset_x=box_offset_w,
     offset_y=box_offset_h,
-    origin_w=origin_w,
-    origin_h=origin_h,
-    origin_offset_w=origin_offset_w,
-    origin_offset_h=origin_offset_h,
 )
 
 # boxes_m = boxes
@@ -136,7 +128,7 @@ for (x, y, w, h) in boxes_m:
 
     predictions = model.predict(img_array)
     score = tf.nn.softmax(predictions[0])
-    print(score)
+    # print(score)
 
     # inc = inc + 1
     # cv2.imwrite("garbage/" + str(inc) + "_g.jpg", image_predict)

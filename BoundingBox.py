@@ -6,10 +6,6 @@ def merge_boxes(
         boxes,
         offset_x=0,
         offset_y=0,
-        origin_w=0,
-        origin_h=0,
-        origin_offset_w=0,
-        origin_offset_h=0
 ):
     results = []
     for i_box, box in enumerate(boxes):
@@ -31,6 +27,29 @@ def merge_boxes(
             results.append(box)
 
     return results
+
+
+def sort_boxes(rectangles, result=None):
+    if result is None:
+        result = []
+
+    area = 0
+    temp_box = ()
+
+    for _, i_box in enumerate(rectangles):
+        _, _, iw, ih = i_box
+        i_area = iw * ih
+
+        if area < i_area:
+            area = i_area
+            temp_box = i_box
+
+    if temp_box:
+        rectangles.remove(temp_box)
+        result.append(temp_box)
+        sort_boxes(rectangles, result)
+
+    return result
 
 
 class BoundingBox:
