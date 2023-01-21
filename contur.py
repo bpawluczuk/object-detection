@@ -12,16 +12,18 @@ def get_contour_areas(contours):
 
 
 # The local path to our target image
-img_path = "images/shape_2.jpg"
+img_path = "images/j1.jpg"
 
 # load the input image
 source_image = cv2.imread(img_path)
+result = source_image.copy()
+
 blurred = cv2.GaussianBlur(source_image, (5, 5), 0)
 
 # convert the input image to grayscale
 gray = cv2.cvtColor(source_image, cv2.COLOR_BGR2GRAY)
 
-gray[gray < 5] = 255.0
+# gray[gray < 5] = 255.0
 
 # apply thresholding to convert grayscale to binary image
 ret, thresh = cv2.threshold(gray, 150, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
@@ -57,7 +59,22 @@ mask = cv2.drawContours(mask, largest_item, -1, (0, 0, 0), 1)
 
 cv2.fillConvexPoly(mask, largest_item, 0)
 
-plt.imshow(mask, cmap="gray")
+plt.imshow(mask)
+plt.show()
+
+mask_inv = cv2.bitwise_not(mask)
+
+plt.imshow(mask_inv)
+plt.show()
+
+result = cv2.cvtColor(result, cv2.COLOR_BGR2RGB)
+
+plt.imshow(result)
+plt.show()
+
+masked = cv2.bitwise_and(result, result, mask=mask)
+
+plt.imshow(masked)
 plt.show()
 
 # ==========================================
