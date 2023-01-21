@@ -16,7 +16,6 @@ img_path = "images/j1.jpg"
 
 # load the input image
 source_image = cv2.imread(img_path)
-result = source_image.copy()
 
 blurred = cv2.GaussianBlur(source_image, (5, 5), 0)
 
@@ -53,11 +52,10 @@ img = cv2.drawContours(source_image, largest_item, -1, (0, 0, 255), 10)
 plt.imshow(img, cmap="gray")
 plt.show()
 
-mask = np.zeros(source_image.shape, np.uint8)
-mask.fill(255)
+mask = np.ones(source_image.shape[:2], np.uint8)
 mask = cv2.drawContours(mask, largest_item, -1, (0, 0, 0), 1)
 
-cv2.fillConvexPoly(mask, largest_item, 0)
+cv2.fillConvexPoly(mask, largest_item, 255)
 
 plt.imshow(mask)
 plt.show()
@@ -67,10 +65,11 @@ mask_inv = cv2.bitwise_not(mask)
 plt.imshow(mask_inv)
 plt.show()
 
+result = cv2.imread("images/j1.jpg")
 result = cv2.cvtColor(result, cv2.COLOR_BGR2RGB)
 
-plt.imshow(result)
-plt.show()
+# plt.imshow(result)
+# plt.show()
 
 masked = cv2.bitwise_and(result, result, mask=mask)
 
