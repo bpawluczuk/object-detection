@@ -14,7 +14,8 @@ def get_contour_areas(contours):
 
 
 # The local path to our target image
-img_path = "images/s11.jpg"
+img_path = "images/6.jpg"
+image_out = "dataset/001/61.jpg"
 
 # load the input image
 source_image = cv2.imread(img_path)
@@ -23,8 +24,6 @@ blurred = cv2.GaussianBlur(source_image, (5, 5), 0)
 
 # convert the input image to grayscale
 gray = cv2.cvtColor(source_image, cv2.COLOR_BGR2GRAY)
-
-# gray[gray < 5] = 255.0
 
 # apply thresholding to convert grayscale to binary image
 ret, thresh = cv2.threshold(gray, 150, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
@@ -70,7 +69,6 @@ plt.imshow(mask_inv)
 plt.show()
 
 result = cv2.imread(img_path)
-result = cv2.cvtColor(result, cv2.COLOR_BGR2RGB)
 
 plt.imshow(result)
 plt.show()
@@ -100,4 +98,4 @@ result = canvas.paste_to_canvas(cropped_image)
 plt.imshow(result)
 plt.show()
 
-# cv2.imwrite("dataset/001/1.jpg", result)
+cv2.imwrite(image_out, result)

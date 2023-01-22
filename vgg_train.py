@@ -32,7 +32,7 @@ data_valid_dir = "dataset_valid"
 
 batch_size = 4
 num_classes = 2
-epochs = 60
+epochs = 50
 
 img_height = 512
 img_width = 512
@@ -164,7 +164,7 @@ plt.show()
 
 # =========================================================
 
-img_path = "dataset/001/34_g.jpg"
+img_path = "dataset/001/22.jpg"
 
 img = tf.keras.utils.load_img(
     img_path, target_size=(img_height, img_width)
@@ -182,7 +182,7 @@ print(
 
 print(score)
 
-img_path = "dataset/002/52_g.jpg"
+img_path = "dataset/002/1.jpg"
 
 img = tf.keras.utils.load_img(
     img_path, target_size=(img_height, img_width)

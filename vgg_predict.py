@@ -33,7 +33,7 @@ boxes = []
 
 class_names = ["001", "002"]
 
-image = cv2.imread("images/shower_all.jpg")
+image = cv2.imread("images/dom_1.jpg")
 
 # Scale down
 percent_of_size = 0.30
@@ -43,10 +43,15 @@ image = cv2.resize(image, (w, h))
 
 # ============================ Object dimensions ========================================
 
-object_w = int(160)
-object_h = int(440)
-offset_w = int(20 / percent_of_size)
-offset_h = int(20 / percent_of_size)
+object_w = int(500)
+object_h = int(1200)
+offset_w = int(30 / percent_of_size)
+offset_h = int(30 / percent_of_size)
+
+# object_w = int(160)
+# object_h = int(440)
+# offset_w = int(10 / percent_of_size)
+# offset_h = int(30 / percent_of_size)
 
 # object_w = int(260)
 # object_h = int(650)
@@ -134,7 +139,7 @@ for (x, y, w, h) in boxes_m:
     # inc = inc + 1
     # cv2.imwrite("garbage/" + str(inc) + "_g.jpg", image_predict)
 
-    if class_names[np.argmax(score)] == "002" and (100 * np.max(score)) >= 50:
+    if class_names[np.argmax(score)] == "001" and (100 * np.max(score)) >= 71:
         inc_predict = inc_predict + 1
 
         # print(
