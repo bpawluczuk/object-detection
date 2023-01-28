@@ -43,7 +43,7 @@ def sort_boxes(rectangles, result=None):
         i_area = iw * ih
 
         # sort asc, desc
-        if area > i_area:
+        if area < i_area:
             area = i_area
             temp_box = i_box
 

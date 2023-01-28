@@ -33,38 +33,33 @@ boxes = []
 
 class_names = ["001", "002"]
 
-image = cv2.imread("images/dom_1.jpg")
+image = cv2.imread("images/test_shape.jpg")
 
 # Scale down
-percent_of_size = 0.30
+percent_of_size = 0.40
 w = int(image.shape[1] * percent_of_size)
 h = int(image.shape[0] * percent_of_size)
 image = cv2.resize(image, (w, h))
 
 # ============================ Object dimensions ========================================
 
-object_w = int(500)
-object_h = int(1200)
-offset_w = int(30 / percent_of_size)
-offset_h = int(30 / percent_of_size)
+# object_w = int(500)
+# object_h = int(1000)
+# offset_w = int(40)
+# offset_h = int(200)
 
-# object_w = int(160)
-# object_h = int(440)
-# offset_w = int(10 / percent_of_size)
-# offset_h = int(30 / percent_of_size)
-
-# object_w = int(260)
-# object_h = int(650)
-# offset_w = int(30)
-# offset_h = int(40)
+object_w = int(200)
+object_h = int(460)
+offset_w = int(60)
+offset_h = int(60)
 
 object_w = int(object_w * percent_of_size)
 object_h = int(object_h * percent_of_size)
 offset_w = int(offset_w * percent_of_size)
 offset_h = int(offset_h * percent_of_size)
 
-box_offset_w = int(object_w / 3)
-box_offset_h = int(object_h / 3)
+box_offset_w = int(object_w / 2)
+box_offset_h = int(object_h / 2)
 
 # ============================== Search Region ==========================================
 
@@ -72,8 +67,8 @@ print("Search...")
 
 ss = cv2.ximgproc.segmentation.createSelectiveSearchSegmentation()
 ss.setBaseImage(image)
-ss.switchToSelectiveSearchFast()
-# ss.switchToSelectiveSearchQuality()
+# ss.switchToSelectiveSearchFast()
+ss.switchToSelectiveSearchQuality()
 rects = ss.process()
 
 (H, W) = image.shape[:2]
@@ -107,7 +102,7 @@ for (x, y, w, h) in rects:
 
 # ============================== Prepare Bounding Boxes ==========================================
 
-boxes = sort_boxes(boxes)
+# boxes = sort_boxes(boxes)
 
 # for _, ii_box in enumerate(boxes):
 #     print(ii_box[2] * ii_box[3])
@@ -118,7 +113,7 @@ boxes_m = merge_boxes(
     offset_y=box_offset_h,
 )
 
-boxes_m = boxes
+# boxes_m = boxes
 
 # ============================== Predict ========================================================
 
@@ -127,21 +122,24 @@ for (x, y, w, h) in boxes_m:
     roi = image[y:y + h, x:x + w]
     roi = cv2.cvtColor(roi, cv2.COLOR_BGR2RGB)
 
-    image_predict = canvas.paste_to_canvas(roi.copy())
+    inc = inc + 1
+    cv2.imwrite("garbage/" + str(inc) + "_g.jpg", roi)
 
+    image_predict = canvas.paste_to_canvas(roi.copy())
+    # print(image_predict.shape)
     img_array = tf.keras.utils.img_to_array(image_predict)
     img_array = tf.expand_dims(img_array, 0)
 
     predictions = model.predict(img_array)
     score = tf.nn.softmax(predictions[0])
-    print(score)
+    # print(score)
 
     # inc = inc + 1
     # cv2.imwrite("garbage/" + str(inc) + "_g.jpg", image_predict)
 
-    if class_names[np.argmax(score)] == "001" and (100 * np.max(score)) >= 71:
+    if class_names[np.argmax(score)] == "002" and (100 * np.max(score)) >= 50:
         inc_predict = inc_predict + 1
-
+        print(score)
         # print(
         #     "This image most likely belongs to {} with a {:.2f} percent confidence."
         #     .format(class_names[np.argmax(score)], 100 * np.max(score))
@@ -149,7 +147,7 @@ for (x, y, w, h) in boxes_m:
 
         color = [random.randint(0, 255) for j in range(0, 3)]
         color = (0, 255, 0)
-        cv2.rectangle(output, (x, y), (x + w, y + h), color, 1)
+        cv2.rectangle(output, (x, y), (x + w, y + h), color, 2)
 
         images_predicted.append(roi)
         score_predicted.append((100 * np.max(score)))

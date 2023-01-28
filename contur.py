@@ -14,8 +14,8 @@ def get_contour_areas(contours):
 
 
 # The local path to our target image
-img_path = "images/6.jpg"
-image_out = "dataset/001/61.jpg"
+img_path = "images/218.jpg"
+image_out = "dataset/002/61.jpg"
 
 # load the input image
 source_image = cv2.imread(img_path)
