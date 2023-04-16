@@ -2,6 +2,8 @@ import cv2
 import numpy as np
 from scipy.interpolate import splprep, splev
 
+from Canvas import Canvas
+
 
 def get_contour_areas(contours):
     all_areas = []
@@ -86,7 +88,7 @@ mask = cv2.drawContours(mask, largest_item, -1, (0, 0, 0), 10)
 cv2.fillConvexPoly(mask, largest_item, 255)
 
 mask_inv = cv2.bitwise_not(mask)
-cv2.imshow("mask_inv", mask)
+cv2.imshow("mask_dilate", mask)
 cv2.waitKey(0)
 
 result = cv2.imread(img_path)
@@ -95,3 +97,25 @@ result[mask_inv != 0] = 0
 
 cv2.imshow("masked", result)
 cv2.waitKey(0)
+
+# ==========================================
+
+x, y, w, h = cv2.boundingRect(largest_item)
+color = (0, 255, 0)
+cv2.rectangle(result, (x, y), (x + w, y + h), color, 2)
+
+cv2.imshow("rect", result)
+cv2.waitKey(0)
+
+cropped_image = result[y:y + h, x:x + w]
+
+cv2.imshow("crop", result)
+cv2.waitKey(0)
+
+canvas = Canvas((512, 512, 3))
+result = canvas.paste_to_canvas(cropped_image)
+
+cv2.imshow("canvas", result)
+cv2.waitKey(0)
+
+cv2.imwrite(image_out, result)

@@ -1,7 +1,7 @@
 import random
 import cv2
 
-image = cv2.imread("images/6.jpg")
+image = cv2.imread("images/shelf_3.jpg")
 
 # image = image.copy()
 # image = cv2.resize(image, (800, 1200), interpolation=cv2.INTER_AREA)
