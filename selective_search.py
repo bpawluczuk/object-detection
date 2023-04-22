@@ -21,20 +21,8 @@ output = image.copy()
 inc = 0
 for (x, y, w, h) in rects:
 
-    # if (w / float(W) < 0.06 or w / float(W) > 0.08) or (h / float(H) < 0.1 or h / float(H) > 0.2):
-    #     continue
-
-    # if not (w / float(W) >= 0.2 and w / float(W) <= 0.6 and h / float(H) >= 0.2 and h / float(H) <= 1):
-    #     continue
-
-    # if not (w / float(W) >= 0.06 and w / float(W) <= 0.08 and h / float(H) >= 0.8 and h / float(H) <= 1):
-    #     continue
-
-    # if not (w / float(W) > 0.02 and w / float(W) < 0.07 and h / float(H) > 0.06 and h / float(H) < 0.15):
-    #     continue
-
-    # if not (w / float(W) < 0.1 and h / float(H) > 0.8):
-    #     continue
+    if not (w / float(W) >= 0.06 and w / float(W) <= 0.08 and h / float(H) >= 0.8 and h / float(H) <= 1):
+        continue
 
     inc = inc + 1
     # draw the region proposal bounding box on the image
