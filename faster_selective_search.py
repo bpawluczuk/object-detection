@@ -2,7 +2,12 @@ import cv2
 import numpy as np
 
 # wczytanie obrazu
-image = cv2.imread('images/shelf_3a.jpg')
+image = cv2.imread('images/shelf_2.jpg')
+
+p = 0.2
+w = int(image.shape[1] * p)
+h = int(image.shape[0] * p)
+image = cv2.resize(image, (w, h))
 
 (H, W) = image.shape[:2]
 print(H, W)
@@ -29,14 +34,14 @@ orimap = model.computeOrientation(edges)
 # edges = model.edgesNms(edges, orimap)
 
 edge_boxes = cv2.ximgproc.createEdgeBoxes()
-edge_boxes.setMaxBoxes(10)
+edge_boxes.setMaxBoxes(100)
 boxes, _ = edge_boxes.getBoundingBoxes(edges, orimap)
 
 for box in boxes:
     x, y, w, h = box
 
-    # if (w / float(W) < 0.04 or w / float(W) > 0.1) or (h / float(H) < 0.7 or h / float(H) > 0.95):
-    #     continue
+    if not (w / float(W) >= 0.07 and w / float(W) <= 0.15 and h / float(H) >= 0.8 and h / float(H) <= 1):
+        continue
 
     # if h / float(H) < 0.7 or h / float(H) > 0.95:
     #     continue

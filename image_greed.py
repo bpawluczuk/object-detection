@@ -1,7 +1,7 @@
 import cv2
 
 # wczytanie obrazu
-img = cv2.imread('images/shelf_3.jpg')
+img = cv2.imread('images/shower_all.jpg')
 
 # podzielenie obrazu na siatkę
 szerokosc, wysokosc, _ = img.shape

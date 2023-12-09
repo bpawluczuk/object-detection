@@ -1,7 +1,7 @@
 import random
 import cv2
 
-image = cv2.imread("images/shelf_3.jpg")
+image = cv2.imread("hsv/hsv.jpg")
 
 # image = image.copy()
 # image = cv2.resize(image, (800, 1200), interpolation=cv2.INTER_AREA)
@@ -9,7 +9,7 @@ image = cv2.imread("images/shelf_3.jpg")
 
 ss = cv2.ximgproc.segmentation.createSelectiveSearchSegmentation()
 ss.setBaseImage(image)
-# ss.switchToSelectiveSearchQuality()
+ss.switchToSelectiveSearchQuality()
 ss.switchToSelectiveSearchFast()
 rects = ss.process()
 
@@ -21,8 +21,8 @@ output = image.copy()
 inc = 0
 for (x, y, w, h) in rects:
 
-    if not (w / float(W) >= 0.06 and w / float(W) <= 0.08 and h / float(H) >= 0.8 and h / float(H) <= 1):
-        continue
+    # if not (w / float(W) >= 0.06 and w / float(W) <= 0.1 and h / float(H) >= 0.5 and h / float(H) <= 1):
+    #     continue
 
     inc = inc + 1
     # draw the region proposal bounding box on the image

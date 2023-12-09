@@ -14,7 +14,8 @@ def get_contour_areas(contours):
 
 
 # The local path to our target image
-img_path = "images/218.jpg"
+img_path = "images/444.jpg"
+# img_path = "hsv/xxx.jpg"
 image_out = "dataset/002/61.jpg"
 
 # load the input image
